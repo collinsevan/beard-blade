@@ -1,7 +1,7 @@
 from django.db import models
 from datetime import datetime
 from django.core.exceptions import ValidationError
-from django.contrib.auth.models import User  # noqa F401
+from django.contrib.auth.models import User
 
 
 """
@@ -59,8 +59,63 @@ class TimeSlot(models.Model):
         return dt_end - dt_start
 
     def __str__(self):
+        total_minutes = self.duration.total_seconds() / 60
+        hours, minutes = divmod(total_minutes, 60)
+        duration_str = f"{int(hours)}h {int(minutes)}m"
         return (f"{self.date} {self.start_time} - {self.end_time} "
-                f"({self.status}, Duration: {self.duration})")
+                f"({self.status}, Duration: {duration_str})")
 
     class Meta:
         ordering = ['date', 'start_time']
+
+
+"""
+Booking model for managing user appointments.
+Links a User, a Service, and a TimeSlot.
+Validates that a confirmed booking uses an available time slot,
+and updates the time slot's status accordingly.
+"""
+
+
+class Booking(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('confirmed', 'Confirmed'),
+        ('cancelled', 'Cancelled'),
+    ]
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="bookings"
+    )
+    service = models.ForeignKey(
+        'Service', on_delete=models.CASCADE, related_name="bookings"
+    )
+    time_slot = models.ForeignKey(
+        'TimeSlot', on_delete=models.CASCADE, related_name="bookings"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    status = models.CharField(
+        max_length=20, choices=STATUS_CHOICES, default='pending'
+    )
+
+    def clean(self):
+        """
+        Validate that a confirmed booking uses an available time slot.
+        """
+        if (self.status == 'confirmed' and
+                self.time_slot.status != 'available'):
+            raise ValidationError(
+                "This time slot is not available for booking."
+            )
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+        if (self.status == 'confirmed' and
+                self.time_slot.status == 'available'):
+            self.time_slot.status = 'booked'
+            self.time_slot.save()
+
+    def __str__(self):
+        return (f"{self.user.username} - {self.service.name} on "
+                f"{self.time_slot.date} at {self.time_slot.start_time}")
