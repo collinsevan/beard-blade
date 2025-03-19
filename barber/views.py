@@ -1,7 +1,11 @@
-from django.shortcuts import render   # noqa: F401
-from django.http import HttpResponse
+from django.shortcuts import render
 
 
-# Create your views here.
 def home(request):
-    return HttpResponse("Welcome to the Barber Booking site!")
+    """Render the home page with the hero section."""
+    return render(request, 'home.html')
+
+
+def base_view(request):
+    """Renders the base template for testing."""
+    return render(request, 'base.html')
