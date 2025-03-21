@@ -1,12 +1,13 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block body_class %}home-page{% endblock %}
+{% block title %}Home - Beard & Blade{% endblock %}
+
 {% block content %}
-<div class="hero">
-    <div class="hero-content">
-        <h1>Welcome to Beard & Blade</h1>
-        <p>Your premium barber experience</p>
-        <a href="#" class="btn btn-primary">Book Now</a>
-    </div>
+<div class="text-center text-white" style="margin-top: 100px;">
+  <h1 class="display-3 fw-bold">Beard & Blade</h1>
+  <p class="lead">Your premium barber experience starts here.</p>
+  <a href="#" class="btn text-white"  style="background-color: #4E3629;">Book Now</a>
 </div>
 {% endblock %}
