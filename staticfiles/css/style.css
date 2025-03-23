@@ -1,0 +1,40 @@
+/* Google Fonts & Custom Colors */
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Montserrat:wght@400;700&display=swap');
+
+:root {
+    --primary-dark: #1C1C1C;
+    --rich-brown: #4E3629;
+    --gold-accent: #af8c16;
+    --professional-white: #F5F5F5;
+    --light-bg: #F4F4F4;
+}
+
+/* Body Styling */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Merriweather', serif;
+    background-color: var(--primary-dark);
+    color: #333;
+}
+
+.home-page {
+    background: url("/static/images/clipperhero.jpg") rgba(0, 0, 0, 0.3);
+    background-blend-mode: multiply;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+}
+
+.sidebar.offcanvas {
+    z-index: 1100 !important;
+}
+
+/* media query for smaller screens */
+@media (max-width: 991px) {
+    .sidebar {
+        background-color: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+    }
+}
