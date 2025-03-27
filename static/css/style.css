@@ -9,15 +9,58 @@
     --light-bg: #F4F4F4;
 }
 
-/* Body Styling */
+/* Global Body Styling */
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Merriweather', serif;
+    font-family: 'Roboto', sans-serif;
     background-color: var(--primary-dark);
-    color: #333;
+    color: var(--primary-dark);
 }
 
+/* Headings Styling */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Merriweather', sans-serif;
+    color: var(--rich-brown);
+    margin-top: 0;
+}
+
+/* Paragraph style */
+p {
+    margin-bottom: 1rem;
+}
+
+/* Links */
+a {
+    color: var(--rich-brown);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--gold-accent);
+    text-decoration: underline;
+}
+
+/* Custom Button Styling */
+.btn-custom {
+    background-color: var(--rich-brown);
+    color: var(--professional-white);
+    border: none;
+    font-family: 'Merriweather', sans-serif;
+    transition: background-color 0.3s ease;
+}
+
+.btn-custom:hover {
+    background-color: var(--gold-accent);
+}
+
+/* Home Page Background Image */
 .home-page {
     background: url("/static/images/clipperhero.jpg") rgba(0, 0, 0, 0.3);
     background-blend-mode: multiply;
@@ -27,11 +70,51 @@ body {
     min-height: 100vh;
 }
 
+/* Footer Styling */
+footer {
+    background-color: var(--primary-dark);
+    color: var(--professional-white);
+    padding: 1rem 0;
+    text-align: center;
+}
+
+/* Offcanvas Sidebar */
 .sidebar.offcanvas {
     z-index: 1100 !important;
 }
 
-/* media query for smaller screens */
+/* Home Page */
+.home-page .hero h1 {
+    color: var(--professional-white) !important;
+}
+
+.home-page .hero p {
+    font-size: 1.5rem;
+    color: var(--professional-white);
+}
+
+
+/* About Page Styling */
+.about-heading {
+    font-size: 2.5rem;
+}
+
+.about-text {
+    font-size: 1.3rem;
+}
+
+.review-text {
+    font-size: 1.25rem;
+}
+
+#about-establishment-img {
+    width: 250px !important;
+    height: 250px !important;
+    object-fit: cover;
+    border-radius: 50% !important;
+}
+
+/* Media Query for Smaller Screens */
 @media (max-width: 991px) {
     .sidebar {
         background-color: rgba(255, 255, 255, 0.2);

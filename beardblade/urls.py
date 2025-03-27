@@ -22,5 +22,6 @@ from barber import views as barber_views
 urlpatterns = [
     path('', barber_views.home, name='home'),
     path('base/', barber_views.base_view, name='base'),
+    path('about/', barber_views.about, name='about'),
     path('admin/', admin.site.urls),
 ]
