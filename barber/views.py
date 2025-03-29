@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 
 
 def home(request):
@@ -14,3 +15,8 @@ def about(request):
 def base_view(request):
     """Renders the base template for testing."""
     return render(request, 'base.html')
+
+
+@login_required
+def book_now(request):
+    return render(request, "booking.html")
