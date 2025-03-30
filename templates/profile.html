@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Profile - Beard & Blade{% endblock %}
+
+{% block content %}
+<!-- Profile Section -->
+<section id="profile-page" class="mb-5">
+    <div class="container mt-4 pt-4">
+        <!-- Greeting -->
+        <div class="row mb-4">
+            <div class="col">
+                <h2 class="text-white fs-0">Hello, {{ user.username }}!</h2>
+                <p class="text-white">Manage your bookings and reviews below.</p>
+            </div>
+        </div>
+        <!-- My Bookings Section -->
+        <div class="row">
+            <div class="col">
+                <a class="profile-section-title d-flex justify-content-between align-items-center"
+                    data-bs-toggle="collapse" href="#bookingsSection" role="button" aria-expanded="false"
+                    aria-controls="bookingsSection">
+                    <span>My Bookings</span>
+                    <i class="bi bi-chevron-down"></i>
+                </a>
+                <hr class="text-white">
+                <div class="collapse" id="bookingsSection">
+                    {% if upcoming_bookings %}
+                    <h5 class="text-white">Upcoming Bookings</h5>
+                    <ul class="list-group mb-3">
+                        {% for booking in upcoming_bookings %}
+                        <li class="list-group-item bg-transparent text-white border-white">
+                            {{ booking.service.name }} on {{ booking.time_slot.date }} at
+                            {{ booking.time_slot.start_time }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="text-white">No upcoming bookings.</p>
+                    {% endif %}
+                    {% if past_bookings %}
+                    <h5 class="text-white">Past Bookings</h5>
+                    <ul class="list-group">
+                        {% for booking in past_bookings %}
+                        <li class="list-group-item bg-transparent text-white border-white">
+                            {{ booking.service.name }} on {{ booking.time_slot.date }} at
+                            {{ booking.time_slot.start_time }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="text-white">No past bookings.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <!-- My Reviews Section -->
+        <div class="row mt-4">
+            <div class="col">
+                <a class="profile-section-title d-flex justify-content-between align-items-center"
+                    data-bs-toggle="collapse" href="#reviewsSection" role="button" aria-expanded="false"
+                    aria-controls="reviewsSection">
+                    <span>My Reviews</span>
+                    <i class="bi bi-chevron-down"></i>
+                </a>
+                <hr class="text-white">
+                <div class="collapse" id="reviewsSection">
+                    <p class="text-white">No reviews yet.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

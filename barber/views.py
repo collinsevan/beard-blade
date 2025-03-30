@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
+from barber.models import Booking
+from datetime import date
 
 
 def home(request):
@@ -55,3 +57,26 @@ def register(request):
             request, "Your account has been created! Please log in.")
         return redirect('login')
     return render(request, 'registration/register.html')
+
+
+@login_required
+def profile(request):
+    """
+    Custom profile view for displaying the logged-in user's account details
+    and their bookings. Retrieves all bookings for the user and separates
+    them into upcoming and past bookings based on the current date.
+    """
+
+    # Retrieve all bookings for the current user
+    all_bookings = Booking.objects.filter(
+        user=request.user).order_by('time_slot__date')
+    today = date.today()
+    # Separate bookings into upcoming and past
+    upcoming_bookings = all_bookings.filter(time_slot__date__gte=today)
+    past_bookings = all_bookings.filter(time_slot__date__lt=today)
+    context = {
+        'username': request.user.username,
+        'upcoming_bookings': upcoming_bookings,
+        'past_bookings': past_bookings,
+    }
+    return render(request, 'profile.html', context)

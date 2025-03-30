@@ -6,12 +6,12 @@
 {% block content %}
 <section id="logout-page" class="d-flex justify-content-center align-items-center">
     <div class="text-center">
-        <h2 class="text-white mb-4">You’ve been logged out</h2>
+        <h2 class="text-white mb-4">Are you sure you want to log out?</h2>
         <div class="d-flex justify-content-center">
-            <a href="javascript:history.back()" class="btn btn-secondary me-2 text-center fs-5">Return</a>
-            <form method="POST" action="{% url 'logout' %}" class="d-inline">
+            <a href="javascript:history.back()" class="btn btn-secondary me-2 text-center fs-5 pt-1 pb-1">Cancel</a>
+            <form method="POST" action="{% url 'home' %}" class="d-inline">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-lg text-white" id="logout-btn">Log In</button>
+                <button type="submit" class="btn btn-lg text-white fs-5 px-2 pb-1 pt-1" id="logout-btn">Log Out</button>
             </form>
         </div>
     </div>

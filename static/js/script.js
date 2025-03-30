@@ -21,5 +21,35 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     });
-    console.log("Password toggle script loaded and running");
+
+    // Profile collapse toggle functionality: Toggle chevron icon on collapse events
+    const collapseElements = document.querySelectorAll("#profile-page .collapse");
+    collapseElements.forEach(function (collapseEl) {
+        collapseEl.addEventListener("show.bs.collapse", function () {
+            // Get the trigger element based on the collapse element's ID
+            const trigger = document.querySelector(
+                '[data-bs-toggle="collapse"][href="#' + collapseEl.id + '"]'
+            );
+            if (trigger) {
+                const icon = trigger.querySelector("i");
+                if (icon) {
+                    icon.classList.remove("bi-chevron-down");
+                    icon.classList.add("bi-chevron-up");
+                }
+            }
+        });
+        collapseEl.addEventListener("hide.bs.collapse", function () {
+            // Get the trigger element based on the collapse element's ID
+            const trigger = document.querySelector(
+                '[data-bs-toggle="collapse"][href="#' + collapseEl.id + '"]'
+            );
+            if (trigger) {
+                const icon = trigger.querySelector("i");
+                if (icon) {
+                    icon.classList.remove("bi-chevron-up");
+                    icon.classList.add("bi-chevron-down");
+                }
+            }
+        });
+    });
 });

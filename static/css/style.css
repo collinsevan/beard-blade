@@ -24,27 +24,16 @@ h2,
 h3,
 h4,
 h5,
-h6 {
+h6,
+a {
     font-family: 'Merriweather', sans-serif;
-    color: var(--rich-brown);
+    color: var(--professional-white);
     margin-top: 0;
 }
 
 /* Paragraph style */
 p {
     margin-bottom: 1rem;
-}
-
-/* Links */
-a {
-    color: var(--rich-brown);
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-a:hover {
-    color: var(--gold-accent);
-    text-decoration: underline;
 }
 
 /* Custom Button Styling */
@@ -54,10 +43,6 @@ a:hover {
     border: none;
     font-family: 'Merriweather', sans-serif;
     transition: background-color 0.3s ease;
-}
-
-.btn-custom:hover {
-    background-color: var(--gold-accent);
 }
 
 /* Home Page Background Image */
@@ -127,6 +112,44 @@ footer {
 
 #logout-btn:hover {
     background-color: #4e3629;
+}
+
+/* Profile styling */
+.profile-section-title {
+    font-size: 1.75rem;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    color: var(--professional-white);
+}
+
+.profile-section-title:hover {
+    transform: scale(1.01);
+}
+
+/* Style for the chevron icon next to section titles */
+.profile-section-title i {
+    font-size: 1.25rem;
+    transition: transform 0.3s ease;
+}
+
+/* Horizontal rule styling in profile page */
+#profile-page hr {
+    border-top: 1px solid var(--professional-white);
+}
+
+/* List group items in profile page (for bookings) */
+#profile-page .list-group-item {
+    background-color: transparent;
+    color: var(--professional-white);
+    border-color: var(--professional-white);
+}
+
+/* Log Out button styling */
+.btn-outline-light {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
 }
 
 /* Media Query for Smaller Screens */
