@@ -3,7 +3,7 @@
 
 :root {
     --primary-dark: #1C1C1C;
-    --rich-brown: #4E3629;
+    --rich-brown: #5d2506;
     --gold-accent: #af8c16;
     --professional-white: #F5F5F5;
     --light-bg: #F4F4F4;
@@ -112,6 +112,21 @@ footer {
     height: 250px !important;
     object-fit: cover;
     border-radius: 50% !important;
+}
+
+/* Logout Styling */
+#logout-page {
+    min-height: 80vh;
+    background-color: var(--primary-dark);
+    padding: 20px;
+}
+
+#logout-btn {
+    background-color: #5d2506;
+}
+
+#logout-btn:hover {
+    background-color: #4e3629;
 }
 
 /* Media Query for Smaller Screens */

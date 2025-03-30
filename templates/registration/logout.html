@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Logged Out - Beard & Blade{% endblock %}
+
+{% block content %}
+<section id="logout-page" class="d-flex justify-content-center align-items-center">
+    <div class="text-center">
+        <h2 class="text-white mb-4">You’ve been logged out</h2>
+        <div class="d-flex justify-content-center">
+            <a href="javascript:history.back()" class="btn btn-secondary me-2 text-center fs-5">Return</a>
+            <form method="POST" action="{% url 'logout' %}" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-lg text-white" id="logout-btn">Log In</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
