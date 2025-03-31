@@ -1,19 +1,19 @@
 /* Google Fonts & Custom Colors */
-@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Montserrat:wght@400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Montserrat:wght@400;700&display=swap");
 
 :root {
-    --primary-dark: #1C1C1C;
+    --primary-dark: #1c1c1c;
     --rich-brown: #5d2506;
     --gold-accent: #af8c16;
-    --professional-white: #F5F5F5;
-    --light-bg: #F4F4F4;
+    --professional-white: #f5f5f5;
+    --light-bg: #f4f4f4;
 }
 
 /* Global Body Styling */
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
     background-color: var(--primary-dark);
     color: var(--primary-dark);
 }
@@ -26,7 +26,7 @@ h4,
 h5,
 h6,
 a {
-    font-family: 'Merriweather', sans-serif;
+    font-family: "Merriweather", sans-serif;
     color: var(--professional-white);
     margin-top: 0;
 }
@@ -34,6 +34,7 @@ a {
 /* Paragraph style */
 p {
     margin-bottom: 1rem;
+    color: var(--professional-white);
 }
 
 /* Custom Button Styling */
@@ -41,7 +42,7 @@ p {
     background-color: var(--rich-brown);
     color: var(--professional-white);
     border: none;
-    font-family: 'Merriweather', sans-serif;
+    font-family: "Merriweather", sans-serif;
     transition: background-color 0.3s ease;
 }
 
@@ -77,7 +78,6 @@ footer {
     font-size: 1.5rem;
     color: var(--professional-white);
 }
-
 
 /* About Page Styling */
 .about-heading {
@@ -139,6 +139,13 @@ footer {
     border-top: 1px solid var(--professional-white);
 }
 
+/* Profile Page Change Password Button */
+#profile-password-btn {
+    background-color: #6c757d;
+    color: var(--professional-white);
+    transition: transform 0.3s ease;
+}
+
 /* List group items in profile page (for bookings) */
 #profile-page .list-group-item {
     background-color: transparent;
@@ -150,6 +157,24 @@ footer {
 .btn-outline-light {
     font-size: 1rem;
     padding: 0.5rem 1rem;
+}
+
+/* Password Change Form Styles */
+.password-toggle i {
+    font-size: 1rem;
+}
+
+/* Password Change Button - Password Change Page */
+#password-change-btn {
+    background-color: #6c757d;
+    color: var(--professional-white);
+    transition: transform 0.3s ease;
+}
+
+#password-change-btn:hover {
+    transform: scale(1.01);
+    background-color: #6c757d;
+    color: var(--professional-white);
 }
 
 /* Media Query for Smaller Screens */

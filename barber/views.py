@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView  # noqa
 from django.contrib import messages
 from barber.models import Booking
 from datetime import date
@@ -80,3 +81,11 @@ def profile(request):
         'past_bookings': past_bookings,
     }
     return render(request, 'profile.html', context)
+
+
+class CustomPasswordChangeView(PasswordChangeView):
+    template_name = 'registration/password_change_form.html'
+
+
+class CustomPasswordChangeDoneView(PasswordChangeDoneView):
+    template_name = 'registration/password_change_done.html'
