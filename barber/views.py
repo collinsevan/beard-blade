@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView  # noqa
 from django.contrib import messages
-from barber.models import Booking
+from barber.models import Booking, Service
 from datetime import date
 
 
@@ -89,3 +89,14 @@ class CustomPasswordChangeView(PasswordChangeView):
 
 class CustomPasswordChangeDoneView(PasswordChangeDoneView):
     template_name = 'registration/password_change_done.html'
+
+
+def services(request):
+    """
+    Render the services page displaying all available barber services.
+    If no services exist, display a warning message.
+    """
+    services_qs = Service.objects.all()
+    if not services_qs.exists():
+        messages.warning(request, "No services available at this time.")
+    return render(request, 'services.html', {'services': services_qs})
