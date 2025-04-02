@@ -67,14 +67,13 @@ def profile(request):
     and their bookings. Retrieves all bookings for the user and separates
     them into upcoming and past bookings based on the current date.
     """
-
     # Retrieve all bookings for the current user
     all_bookings = Booking.objects.filter(
-        user=request.user).order_by('time_slot__date')
+        user=request.user).order_by('timeslots__date')
     today = date.today()
     # Separate bookings into upcoming and past
-    upcoming_bookings = all_bookings.filter(time_slot__date__gte=today)
-    past_bookings = all_bookings.filter(time_slot__date__lt=today)
+    upcoming_bookings = all_bookings.filter(timeslots__date__gte=today)
+    past_bookings = all_bookings.filter(timeslots__date__lt=today)
     context = {
         'username': request.user.username,
         'upcoming_bookings': upcoming_bookings,

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Services - Beard & Blade
+{% endblock %}
+
+{% block content %}
+<section class="container my-5">
+    <h2 class="text-center text-white mb-4">Our Services</h2>
+    <div class="row">
+        {% for service in services %}
+        <div class="col-md-4 mb-4">
+            <div class="card services-card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ service.name }}</h5>
+                    <p class="card-text">
+                        Price: €{{ service.price }}<br>
+                        Duration: {{ service.get_duration_display }}
+                    </p>
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'book_now' %}" class="btn btn-custom">
+                        Book Now
+                    </a>
+                    {% else %}
+                    <a href="{% url 'login' %}?next={% url 'book_now' %}" class="btn btn-custom">
+                        Book Now
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <p class="text-white text-center">
+                No services available at this time.
+            </p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

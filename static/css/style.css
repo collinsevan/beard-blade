@@ -177,6 +177,35 @@ footer {
     color: var(--professional-white);
 }
 
+/* Services Card Styling */
+.services-card {
+    background-color: rgb(60, 60, 60);
+    /* Same as login form */
+    color: var(--professional-white);
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.services-card:hover {
+    transform: translateY(-5px);
+}
+
+.services-card .card-title,
+.services-card .card-text {
+    color: var(--professional-white);
+}
+
+.services-card .btn-custom {
+    background-color: #5d2506;
+    color: var(--professional-white);
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.services-card .btn-custom:hover {
+    background-color: #4e3629;
+}
 
 /* Media Query for Smaller Screens */
 @media (max-width: 991px) {
