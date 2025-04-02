@@ -38,13 +38,29 @@ p {
 }
 
 /* Custom Button Styling */
-.btn-custom {
-    background-color: var(--rich-brown);
-    color: var(--professional-white);
-    border: none;
-    font-family: "Merriweather", sans-serif;
-    transition: background-color 0.3s ease;
+.btn-brown {
+    background-color: #5d2506 !important;
+    color: var(--professional-white) !important;
+    border: none !important;
+    transition: background-color 0.3s ease !important;
 }
+
+.btn-brown:hover {
+    background-color: #4e3629 !important;
+}
+
+.btn-gray {
+    background-color: #6c757d !important;
+    color: var(--professional-white) !important;
+    border: none !important;
+    transition: background-color 0.3s ease !important;
+    font-family: "Merriweather", sans-serif
+  }
+  
+  .btn-gray:hover {
+    background-color: #5a6268 !important;
+  }
+
 
 /* Home Page Background Image */
 .home-page {
@@ -141,8 +157,6 @@ footer {
 
 /* Profile Page Change Password Button */
 #profile-password-btn {
-    background-color: #6c757d;
-    color: var(--professional-white);
     transition: transform 0.3s ease;
 }
 
@@ -180,7 +194,6 @@ footer {
 /* Services Card Styling */
 .services-card {
     background-color: rgb(60, 60, 60);
-    /* Same as login form */
     color: var(--professional-white);
     border: none;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);

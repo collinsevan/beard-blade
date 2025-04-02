@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load tz %}
 
 {% block title %}
 Book Now - Beard & Blade
@@ -8,5 +9,44 @@ Book Now - Beard & Blade
 {% block content %}
 <section class="container my-5">
     <h2 class="text-white text-center mb-4">Book a Service</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card" style="background-color: rgb(60,60,60);">
+                <div class="card-body">
+                    <form method="POST" action="{% url 'book_now' %}">
+                        {% csrf_token %}
+                        <!-- Service selection -->
+                        <div class="mb-3">
+                            <label for="service" class="form-label text-white">Service</label>
+                            <select class="form-select" id="service" name="service">
+                                {% for service in services %}
+                                <option value="{{ service.id }}">
+                                    {{ service.name }} - €{{ service.price }}
+                                    ({{ service.get_duration_display }})
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <!-- Date selection -->
+                        <div class="mb-3">
+                            <label for="date" class="form-label text-white">Date</label>
+                            <input type="date" class="form-control" id="date" name="date" required
+                                min="{% now 'Y-m-d' %}">
+                        </div>
+                        <!-- Time selection -->
+                        <div class="mb-3">
+                            <label for="time" class="form-label text-white">Start Time</label>
+                            <input type="time" class="form-control" id="time" name="time" required>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-gray">
+                                Book Now
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 {% endblock %}

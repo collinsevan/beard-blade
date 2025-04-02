@@ -1,10 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView  # noqa
 from django.contrib import messages
-from barber.models import Booking, Service
-from datetime import date
+from django.utils.dateparse import parse_date
+from barber.models import Booking, Service, TimeSlot
+from datetime import date, datetime, timedelta
 
 
 def home(request):
@@ -24,7 +25,98 @@ def base_view(request):
 
 @login_required
 def book_now(request):
-    return render(request, "booking.html")
+    """
+    Handles booking form submissions.
+    Validates that all fields are provided and the selected date is not in
+    the past. Retrieves the selected service and checks for contiguous
+    available 15-minute timeslots based on the service duration. If found,
+    creates a booking with status 'pending' and reserves those timeslots.
+    """
+    services_qs = Service.objects.all()
+
+    if request.method == "POST":
+        service_id = request.POST.get("service")
+        selected_date_str = request.POST.get("date")
+        start_time_str = request.POST.get("time")
+
+        # Validate that all fields are provided.
+        if not service_id or not selected_date_str or not start_time_str:
+            messages.error(request, "All fields are required.")
+            return redirect("book_now")
+
+        # Parse and validate the selected date.
+        selected_date = parse_date(selected_date_str)
+        if selected_date is None:
+            messages.error(request, "Invalid date format provided.")
+            return redirect("book_now")
+        if selected_date < date.today():
+            messages.error(request, "You cannot select a past date.")
+            return redirect("book_now")
+
+        # Retrieve the service; 404 if not found.
+        service = get_object_or_404(Service, pk=service_id)
+
+        # Parse the selected time.
+        try:
+            selected_time = datetime.strptime(start_time_str, "%H:%M").time()
+        except ValueError:
+            messages.error(request, "Invalid time format.")
+            return redirect("book_now")
+
+        start_datetime = datetime.combine(selected_date, selected_time)
+
+        # Determine the number of 15-min slots required.
+        required_slots = int(service.duration.total_seconds() // (15 * 60))
+        if required_slots < 1:
+            messages.error(request, "Service duration is invalid.")
+            return redirect("book_now")
+
+        # Check for available contiguous timeslots.
+        slots_to_book = []
+        available = True
+        for i in range(required_slots):
+            current_slot_start = (start_datetime + timedelta(
+                minutes=15 * i)).time()
+            current_slot_end = (start_datetime + timedelta(
+                minutes=15 * (i + 1))).time()
+            try:
+                slot = TimeSlot.objects.get(
+                    date=selected_date,
+                    start_time=current_slot_start,
+                    end_time=current_slot_end,
+                    status="available"
+                )
+                slots_to_book.append(slot)
+            except TimeSlot.DoesNotExist:
+                available = False
+                break
+
+        if not available or len(slots_to_book) != required_slots:
+            messages.error(
+                request,
+                "Selected time slots are not available. "
+                "Please choose a different time."
+            )
+            return redirect("book_now")
+
+        # Create the booking and reserve the timeslots.
+        booking = Booking.objects.create(
+            user=request.user,
+            service=service,
+            status="pending"
+        )
+        booking.timeslots.set(slots_to_book)
+        for slot in slots_to_book:
+            slot.status = "pending"
+            slot.save()
+
+        messages.success(
+            request,
+            "Booking request received. Await confirmation."
+        )
+        return redirect("profile")
+
+    return render(request, "booking.html", {"services": services_qs})
 
 
 def register(request):
