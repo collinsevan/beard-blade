@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY")   # noqa: E501
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com']
 
@@ -41,8 +41,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_crontab',
     'barber',
 ]
+
+
+# Cron job configuration for django-crontab
+CRONJOBS = [
+    ('0 0 * * *', 'django.core.management.call_command', ['timeslots']),
+]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

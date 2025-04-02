@@ -20,9 +20,25 @@ class BookingAdmin(admin.ModelAdmin):
     This allows the barber to manage bookings, including
     confirming or canceling them.
     """
-    list_display = ('user', 'service', 'time_slot', 'status', 'created_at')
-    list_filter = ('status', 'created_at')
-    search_fields = ('user__username', 'service__name')
+    list_display = (
+        "user",
+        "service",
+        "display_timeslots",
+        "status",
+        "created_at",
+    )
+    list_filter = ("status", "created_at")
+    search_fields = ("user__username", "service__name")
+
+    def display_timeslots(self, obj):
+        """
+        Return a comma-separated string of dates and start times for each
+        timeslot associated with the booking.
+        """
+        return ", ".join(
+            [f"{slot.date} {slot.start_time}" for slot in obj.timeslots.all()]
+        )
+    display_timeslots.short_description = "Time Slots"
 
 
 admin.site.register(Booking, BookingAdmin)
