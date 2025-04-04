@@ -79,7 +79,19 @@ document.addEventListener("DOMContentLoaded", function () {
         // Update time options when the date selection changes
         if (dateSelect) {
             dateSelect.addEventListener("change", function () {
-                populateTimeOptions(this.value);
+                if (!timeslotsByDate[this.value]) {
+                    // Trigger the Bootstrap modal instead of an alert
+                    const modalElement = document.getElementById("noTimeSlotsModal");
+                    const noTimeSlotsModal = new bootstrap.Modal(modalElement);
+                    noTimeSlotsModal.show();
+                    timeSelect.innerHTML = "";
+                    const option = document.createElement("option");
+                    option.value = "";
+                    option.textContent = "No available time slots";
+                    timeSelect.appendChild(option);
+                } else {
+                    populateTimeOptions(this.value);
+                }
             });
         }
     }

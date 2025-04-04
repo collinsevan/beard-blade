@@ -220,6 +220,28 @@ footer {
     background-color: #4e3629;
 }
 
+/* Custom Modal Styling for booking form */
+#noTimeSlotsModal .modal-content {
+    background-color: rgb(60, 60, 60);
+    color: white;
+    border: none;
+}
+
+#noTimeSlotsModal .modal-header,
+#noTimeSlotsModal .modal-footer {
+    border-color: #444;
+}
+
+#noTimeSlotsModal .btn-close {
+    filter: invert(1);
+}
+
+#noTimeSlotsModal .btn-gray.btn-secondary {
+    background-color: rgb(60, 60, 60);
+    color: white;
+    border: 1px solid #444;
+}
+
 /* Media Query for Smaller Screens */
 @media (max-width: 991px) {
     .sidebar {
