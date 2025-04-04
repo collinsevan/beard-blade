@@ -57,7 +57,6 @@ def book_now(request):
             messages.error(request, "You cannot select a past date.")
             return redirect("book_now")
 
-        # Retrieve the service; 404 if not found.
         service = get_object_or_404(Service, pk=service_id)
 
         # Parse the selected time.
@@ -98,17 +97,15 @@ def book_now(request):
         if not available or len(slots_to_book) != required_slots:
             messages.error(
                 request,
-                "Selected time slots are not available. "
-                "Please choose a different time."
+                (
+                    "Selected time slots are not available. Please choose a "
+                    "different time."
+                )
             )
             return redirect("book_now")
 
-        # Create the booking and reserve the timeslots.
-        booking = Booking.objects.create(
-            user=request.user,
-            service=service,
-            status="pending"
-        )
+        booking = Booking(user=request.user, service=service, status="pending")
+        booking.save()
         booking.timeslots.set(slots_to_book)
         for slot in slots_to_book:
             slot.status = "pending"

@@ -23,8 +23,7 @@ class Service(models.Model):
         return f"{int(hours)}h {int(minutes)}m"
 
     def __str__(self):
-        return (f"{self.name} - €{self.price} "
-                f"({self.get_duration_display()})")
+        return f"{self.name} - €{self.price} ({self.get_duration_display()})"
 
 
 """
@@ -152,35 +151,37 @@ class Booking(models.Model):
         the service duration. Also, ensure that all selected time slots
         are available.
         """
-        total_required_minutes = self.service.duration.total_seconds() / 60
-        # Each slot is 15 minutes.
+        total_required_minutes = (
+            self.service.duration.total_seconds() / 60
+        )
         required_slots = int(total_required_minutes / 15)
-        if self.timeslots.count() != required_slots:
-            raise ValidationError(
-                f"{self.service.name} requires {required_slots * 15} minutes. "
-                f"Please select exactly {required_slots} contiguous "
-                f"15-minute slots."
-            )
-
-        # Order the time slots by start_time for contiguous check.
-        slots = list(self.timeslots.all().order_by('start_time'))
-        if not slots:
-            raise ValidationError("No time slots selected.")
-
-        for i in range(1, len(slots)):
-            prev_end = datetime.combine(slots[i - 1].date,
-                                        slots[i - 1].end_time)
-            current_start = datetime.combine(slots[i].date,
-                                             slots[i].start_time)
-            if current_start != prev_end:
+        # Validate many-to-many fields if the instance is saved
+        # and timeslots exist.
+        if self.pk and self.timeslots.exists():
+            if self.timeslots.count() != required_slots:
                 raise ValidationError(
-                    "Selected time slots are not contiguous.")
-
-        for slot in slots:
-            if slot.status != 'available':
-                raise ValidationError(
-                    "One or more selected time slots are not available."
+                    f"{self.service.name} requires {required_slots * 15} "
+                    f"minutes. Please select exactly {required_slots} "
+                    f"contiguous 15-minute slots."
                 )
+            # Order the time slots by start_time for contiguous check.
+            slots = list(self.timeslots.all().order_by('start_time'))
+            if not slots:
+                raise ValidationError("No time slots selected.")
+            for i in range(1, len(slots)):
+                prev_end = datetime.combine(slots[i - 1].date,
+                                            slots[i - 1].end_time)
+                current_start = datetime.combine(slots[i].date,
+                                                 slots[i].start_time)
+                if current_start != prev_end:
+                    raise ValidationError(
+                        "Selected time slots are not contiguous."
+                    )
+            for slot in slots:
+                if slot.status != 'available':
+                    raise ValidationError(
+                        "One or more selected time slots are not available."
+                    )
 
     def save(self, *args, **kwargs):
         """
@@ -198,8 +199,13 @@ class Booking(models.Model):
             self.timeslots.update(status='available')
 
     def __str__(self):
-        slots_str = ", ".join(
-            [f"{slot.date} {slot.start_time}"
-             for slot in self.timeslots.all()]
+        if not self.pk:
+            return f"{self.user.username} - {self.service.name}"
+        try:
+            count = self.timeslots.count()
+        except Exception:
+            count = 0
+        return (
+            f"{self.user.username} - {self.service.name} "
+            f"({count} slots)"
         )
-        return f"{self.user.username} - {self.service.name} on {slots_str}"
