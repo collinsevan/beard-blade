@@ -70,6 +70,7 @@ class TimeSlot(models.Model):
 
     class Meta:
         ordering = ['date', 'start_time']
+        unique_together = ('date', 'start_time', 'end_time')
 
 
 """

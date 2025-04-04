@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
         collapseEl.addEventListener("hide.bs.collapse", function () {
-            // Get the trigger element based on the collapse element's ID
+            // Get the trigger element based on the collapse element
             const trigger = document.querySelector(
                 '[data-bs-toggle="collapse"][href="#' + collapseEl.id + '"]'
             );
@@ -52,4 +52,35 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     });
+
+    // Retrieve timeslots data from the embedded JSON
+    const timeslotsDataElem = document.getElementById("timeslots-data");
+    if (timeslotsDataElem) {
+        const timeslotsByDate = JSON.parse(timeslotsDataElem.textContent);
+        const dateSelect = document.getElementById("date");
+        const timeSelect = document.getElementById("time");
+
+        // Populate time dropdown based on selected date
+        function populateTimeOptions(selectedDate) {
+            timeSelect.innerHTML = "";
+            if (timeslotsByDate[selectedDate]) {
+                timeslotsByDate[selectedDate].forEach(function (timeStr) {
+                    const option = document.createElement("option");
+                    option.value = timeStr;
+                    option.textContent = timeStr;
+                    timeSelect.appendChild(option);
+                });
+            }
+        }
+        // On page load populate time options for the current date
+        if (dateSelect && dateSelect.value) {
+            populateTimeOptions(dateSelect.value);
+        }
+        // Update time options when the date selection changes
+        if (dateSelect) {
+            dateSelect.addEventListener("change", function () {
+                populateTimeOptions(this.value);
+            });
+        }
+    }
 });

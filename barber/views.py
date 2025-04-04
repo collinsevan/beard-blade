@@ -1,11 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView  # noqa
 from django.contrib import messages
 from django.utils.dateparse import parse_date
 from barber.models import Booking, Service, TimeSlot
 from datetime import date, datetime, timedelta
+from collections import defaultdict
+from django.contrib.auth.views import (
+    PasswordChangeView,
+    PasswordChangeDoneView
+)
 
 
 def home(request):
@@ -75,10 +79,10 @@ def book_now(request):
         slots_to_book = []
         available = True
         for i in range(required_slots):
-            current_slot_start = (start_datetime + timedelta(
-                minutes=15 * i)).time()
-            current_slot_end = (start_datetime + timedelta(
-                minutes=15 * (i + 1))).time()
+            current_slot_start = (
+                start_datetime + timedelta(minutes=15 * i)).time()
+            current_slot_end = (
+                start_datetime + timedelta(minutes=15 * (i + 1))).time()
             try:
                 slot = TimeSlot.objects.get(
                     date=selected_date,
@@ -116,7 +120,23 @@ def book_now(request):
         )
         return redirect("profile")
 
-    return render(request, "booking.html", {"services": services_qs})
+    # Build a dictionary of available timeslots grouped by date
+    # Filter out passed timeslots.
+    timeslots_by_date = defaultdict(list)
+    today = date.today()
+    current_time = datetime.now().time()
+    available_slots = TimeSlot.objects.filter(status='available')
+    for slot in available_slots:
+        # Check if time slot is earlier or equal to current time if not skip
+        if slot.date == today and slot.start_time <= current_time:
+            continue
+        timeslots_by_date[str(slot.date)].append(
+            slot.start_time.strftime("%H:%M"))
+
+    return render(request, "booking.html", {
+        "services": services_qs,
+        "timeslots_by_date": dict(timeslots_by_date)
+    })
 
 
 def register(request):

@@ -31,12 +31,12 @@ Book Now - Beard & Blade
                         <div class="mb-3">
                             <label for="date" class="form-label text-white">Date</label>
                             <input type="date" class="form-control" id="date" name="date" required
-                                min="{% now 'Y-m-d' %}">
+                                min="{% now 'Y-m-d' %}" value="{% now 'Y-m-d' %}">
                         </div>
                         <!-- Time selection -->
                         <div class="mb-3">
                             <label for="time" class="form-label text-white">Start Time</label>
-                            <input type="time" class="form-control" id="time" name="time" required>
+                            <select class="form-select" id="time" name="time"></select>
                         </div>
                         <div class="text-center">
                             <button type="submit" class="btn btn-gray">
@@ -49,4 +49,5 @@ Book Now - Beard & Blade
         </div>
     </div>
 </section>
+{{ timeslots_by_date|json_script:"timeslots-data" }}
 {% endblock %}
