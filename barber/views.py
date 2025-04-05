@@ -37,8 +37,7 @@ def book_now(request):
     creates a booking with status 'pending' and reserves those timeslots.
     For editing, if a GET parameter "edit" is provided, the form is
     prepopulated with the existing booking's data. On POST, if the time or
-    date is changed, the existing booking is canceled and a new one is
-    created.
+    date is changed, the existing booking is updated.
     """
     services_qs = Service.objects.all()
 
@@ -115,18 +114,31 @@ def book_now(request):
             )
             return redirect("book_now")
 
-        # If editing, cancel the existing booking.
         if edit_booking:
-            edit_booking.status = "cancelled"
+            for old_slot in edit_booking.timeslots.all():
+                old_slot.status = "available"
+                old_slot.save()
+
+            # Update the booking with the new service and timeslots.
+            edit_booking.service = service
+            edit_booking.timeslots.clear()
+            edit_booking.status = "pending"
             edit_booking.save()
 
-        # NEW: Create a new booking instance and save it to get a primary key.
-        booking = Booking(user=request.user, service=service, status="pending")
-        booking.save()
-        booking.timeslots.set(slots_to_book)
-        for slot in slots_to_book:
-            slot.status = "pending"
-            slot.save()
+            edit_booking.timeslots.set(slots_to_book)
+            for slot in slots_to_book:
+                slot.status = "pending"
+                slot.save()
+            booking = edit_booking
+        else:
+            # Create a new booking instance and save it to get a primary key.
+            booking = Booking(user=request.user,
+                              service=service, status="pending")
+            booking.save()
+            booking.timeslots.set(slots_to_book)
+            for slot in slots_to_book:
+                slot.status = "pending"
+                slot.save()
 
         messages.success(
             request, "Booking request received. Await confirmation.")
