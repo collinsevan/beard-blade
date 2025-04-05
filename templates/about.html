@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load ratings %}
 
 {% block title %}About - Beard & Blade{% endblock %}
 
@@ -53,43 +54,33 @@
 <section id="reviews" class="my-5">
   <div class="container">
     <h2 class="text-white text-center mb-4">What Our Clients Say</h2>
-    <div id="reviewsCarousel" class="carousel slide" data-bs-ride="carousel">
-      <div class="carousel-inner">
-        <div class="carousel-item active">
-          <blockquote class="blockquote text-white text-center">
-            <p class="mb-4 review-text" style="font-size: 1.25rem;">
-              "Amazing service! I always leave feeling refreshed and looking my best."
-            </p>
-            <footer class="blockquote-footer text-white">Client Name 1</footer>
-          </blockquote>
+    {% if random_reviews %}
+    <ul class="list-group">
+      {% for review in random_reviews %}
+      <li class="list-group-item bg-transparent text-white border-white">
+        <div>
+          <strong>{{ review.booking.service.name }}</strong> -
+
+          {% ratings review %}
+          <br>
+          {{ review.comment }}
+          <br>
+          <small>
+            by {{ review.user.username }} on
+            {{ review.created_at|date:"Y-m-d" }}
+          </small>
         </div>
-        <div class="carousel-item">
-          <blockquote class="blockquote text-white text-center">
-            <p class="mb-4 review-text" style="font-size: 1.25rem;">
-              "The experience at Beard & Blade is unmatched. Highly recommended!"
-            </p>
-            <footer class="blockquote-footer text-white">Client Name 2</footer>
-          </blockquote>
-        </div>
-        <div class="carousel-item">
-          <blockquote class="blockquote text-white text-center">
-            <p class="mb-4 review-text" style="font-size: 1.25rem;">
-              "Professional, friendly, and skilled. Truly a cut above the rest."
-            </p>
-            <footer class="blockquote-footer text-white">Client Name 3</footer>
-          </blockquote>
-        </div>
-      </div>
-      <!-- Carousel Controls -->
-      <button class="carousel-control-prev" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-      </button>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="text-white text-center">No reviews available.</p>
+    {% endif %}
+    <div class="text-center mt-3">
+      <a href="{% url 'reviews' %}" class="btn btn-brown">Read More</a>
     </div>
   </div>
 </section>
+
+
 {% endblock %}

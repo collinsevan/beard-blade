@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+{% load ratings %}
+
+
+{% block title %}Reviews - Beard & Blade{% endblock %}
+
+{% block content %}
+<section class="container my-5">
+  <h2 class="text-white text-center mb-4">Reviews</h2>
+  <hr class="text-white">
+  {% if all_reviews %}
+    <ul class="list-group">
+      {% for review in all_reviews %}
+      <li class="list-group-item bg-transparent text-white border-white">
+        <div>
+          <strong>{{ review.booking.service.name }}</strong> - 
+          {% ratings review %}
+          <br>
+          {{ review.comment }}
+          <br>
+          <small>
+              by {{ review.user.username }} on 
+              {{ review.created_at|date:"Y-m-d" }}
+          </small>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="text-white text-center">No reviews yet.</p>
+  {% endif %}
+</section>
+{% endblock %}

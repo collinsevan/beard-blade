@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load ratings %}
 
 {% block title %}Profile - Beard & Blade{% endblock %}
 
@@ -32,8 +33,8 @@
                         <li
                             class="list-group-item bg-transparent text-white border-white d-flex justify-content-between align-items-center">
                             <div>
-                                {{ booking.service.name }} on {{ booking.get_date }} from
-                                {{ booking.get_time_range }} - Status: {{ booking.status }}
+                                {{ booking.service.name }} on {{ booking.get_date }} from {{ booking.get_time_range }} -
+                                Status: {{ booking.status }}
                             </div>
                             <div>
                                 <a href="{% url 'book_now' %}?edit={{ booking.id }}" class="btn btn-brown btn-sm me-2">
@@ -41,7 +42,7 @@
                                 </a>
                                 <a href="{% url 'booking_cancel' booking.id %}" class="btn btn-gray btn-sm">
                                     Cancel
-                                </a>                                
+                                </a>
                             </div>
                         </li>
                         {% endfor %}
@@ -54,8 +55,8 @@
                     <ul class="list-group">
                         {% for booking in past_bookings %}
                         <li class="list-group-item bg-transparent text-white border-white">
-                            {{ booking.service.name }} on {{ booking.get_date }} from
-                            {{ booking.get_time_range }} - Status: {{ booking.status }}
+                            {{ booking.service.name }} on {{ booking.get_date }} from {{ booking.get_time_range }} -
+                            Status: {{ booking.status }}
                         </li>
                         {% endfor %}
                     </ul>
@@ -68,18 +69,41 @@
         <!-- My Reviews Section -->
         <div class="row mt-4">
             <div class="col">
-                <a class="profile-section-title d-flex justify-content-between align-items-center"
-                    data-bs-toggle="collapse" href="#reviewsSection" role="button" aria-expanded="false"
-                    aria-controls="reviewsSection">
-                    <span>My Reviews</span>
-                    <i class="bi bi-chevron-down"></i>
-                </a>
+                <h3 class="text-white">My Reviews</h3>
                 <hr class="text-white">
-                <div class="collapse" id="reviewsSection">
-                    <p class="text-white">No reviews yet.</p>
-                </div>
+                {% if user_reviews %}
+                <ul class="list-group">
+                    {% for review in user_reviews %}
+                    <li class="list-group-item bg-transparent text-white border-white">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>{{ review.booking.service.name }}</strong> -
+                                {% ratings review %}
+                                <br>
+                                {{ review.comment }}
+                                <br>
+                                <small>
+                                    by {{ review.user.username }} on {{ review.created_at|date:"Y-m-d" }}
+                                </small>
+                            </div>
+                            <div>
+                                <a href="{% url 'edit_review' review.id %}" class="btn btn-brown btn-sm me-2">
+                                    Edit
+                                </a>
+                                <a href="{% url 'delete_review' review.id %}" class="btn btn-gray btn-sm">
+                                    Delete
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-white">No reviews yet.</p>
+                {% endif %}
             </div>
         </div>
+        <!-- Change Password Button -->
         <div class="text-center mt-4">
             <a href="{% url 'password_change' %}" id="profile-password-btn"
                 class="btn btn-gray text-white px-3 py-2 fs-4 rounded-3" style="background-color: #6c757d;">

@@ -25,4 +25,5 @@ urlpatterns = [
         barber_views.booking_cancel,
         name="booking_cancel",
     ),
+    path('reviews/', barber_views.reviews, name='reviews'),
 ]

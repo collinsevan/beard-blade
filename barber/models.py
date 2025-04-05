@@ -1,6 +1,7 @@
 from django.db import models
 from datetime import datetime
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
 
 """
@@ -230,3 +231,39 @@ class Booking(models.Model):
         start_time = slots.first().start_time.strftime("%H:%M")
         end_time = slots.last().end_time.strftime("%H:%M")
         return f"{start_time} - {end_time}"
+
+
+class Review(models.Model):
+    """
+    Review model stores feedback for a completed booking.
+    Each review is linked to a booking (OneToOne) so each booking has one
+    review at most. It has a rating (1-5) and an optional comment.
+    Timestamps are auto-set on creation and update.
+    """
+    booking = models.OneToOneField(
+        'Booking', on_delete=models.CASCADE, related_name="review"
+    )
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="reviews"
+    )
+    rating = models.PositiveSmallIntegerField(
+        default=5,
+        validators=[MinValueValidator(1), MaxValueValidator(5)],
+        help_text="Rating out of 5"
+    )
+    comment = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def clean(self):
+        """
+        Validate that rating is between 1 and 5.
+        """
+        if self.rating < 1 or self.rating > 5:
+            raise ValidationError("Rating must be between 1 and 5.")
+
+    def __str__(self):
+        return (
+            f"Review for {self.booking.service.name} by "
+            f"{self.user.username}"
+        )

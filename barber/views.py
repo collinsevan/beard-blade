@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.utils.dateparse import parse_date
-from barber.models import Booking, Service, TimeSlot
+from barber.models import Booking, Service, TimeSlot, Review
 from datetime import date, datetime, timedelta
 from collections import defaultdict
 from django.contrib.auth.views import (
@@ -18,8 +18,12 @@ def home(request):
 
 
 def about(request):
-    """Render the About page with shop and barber details."""
-    return render(request, 'about.html')
+    """
+    Render the About page with establishment details and random reviews.
+    """
+    random_reviews = Review.objects.order_by('?')[:3]
+    context = {'random_reviews': random_reviews}
+    return render(request, 'about.html', context)
 
 
 def base_view(request):
@@ -222,10 +226,12 @@ def profile(request):
     # Separate bookings into upcoming and past
     upcoming_bookings = all_bookings.filter(timeslots__date__gte=today)
     past_bookings = all_bookings.filter(timeslots__date__lt=today)
+    user_reviews = request.user.reviews.all()
     context = {
         'username': request.user.username,
         'upcoming_bookings': upcoming_bookings,
         'past_bookings': past_bookings,
+        'user_reviews': user_reviews,
     }
     return render(request, 'profile.html', context)
 
@@ -261,3 +267,12 @@ def booking_cancel(request, booking_id):
     booking.save()
     messages.success(request, "Booking cancelled successfully.")
     return redirect("profile")
+
+
+def reviews(request):
+    """
+    Display all reviews on a dedicated Reviews page.
+    """
+    all_reviews = Review.objects.all().order_by('-created_at')
+    context = {'all_reviews': all_reviews}
+    return render(request, 'reviews.html', context)
