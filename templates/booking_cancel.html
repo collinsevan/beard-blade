@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Cancel Booking - Beard & Blade{% endblock %}
+
+{% block content %}
+<section id="booking-cancel-page" class="d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="text-center">
+        <h2 class="text-white mb-4">
+            Cancel Booking for {{ booking.service.name }}<br>
+            on {{ booking.get_date }} from {{ booking.get_time_range }}
+        </h2>
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-gray text-white fs-4 px-3 py-2 rounded-3">
+                Cancel Booking
+            </button>
+        </form>
+    </div>
+</section>
+{% endblock %}

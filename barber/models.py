@@ -189,8 +189,11 @@ class Booking(models.Model):
         Mark time slots as pending on booking creation, update to booked
         on confirmation, or revert to available on cancellation.
         """
-        self.full_clean()
+        if self.status in ['pending', 'confirmed']:
+            self.full_clean()
+
         super().save(*args, **kwargs)
+
         if self.status == 'pending':
             self.timeslots.update(status='pending')
         elif self.status == 'confirmed':
@@ -209,3 +212,21 @@ class Booking(models.Model):
             f"{self.user.username} - {self.service.name} "
             f"({count} slots)"
         )
+
+    def get_date(self):
+        """Return the booking date from the earliest timeslot."""
+        slots = self.timeslots.all().order_by('start_time')
+        return slots.first().date if slots.exists() else None
+
+    # Method to get the overall time range of the booking.
+    def get_time_range(self):
+        """
+        Return a string representing the time range from the earliest start
+        time to the latest end time, e.g., "10:00 - 10:45".
+        """
+        slots = self.timeslots.all().order_by('start_time')
+        if not slots.exists():
+            return ""
+        start_time = slots.first().start_time.strftime("%H:%M")
+        end_time = slots.last().end_time.strftime("%H:%M")
+        return f"{start_time} - {end_time}"

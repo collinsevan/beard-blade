@@ -20,4 +20,9 @@ urlpatterns = [
         template_name="registration/logout.html"), name="logout"),
     path("accounts/", include("django.contrib.auth.urls")),
     path('admin/', admin.site.urls),
+    path(
+        "cancel/<int:booking_id>/",
+        barber_views.booking_cancel,
+        name="booking_cancel",
+    ),
 ]

@@ -35,8 +35,19 @@ def book_now(request):
     the past. Retrieves the selected service and checks for contiguous
     available 15-minute timeslots based on the service duration. If found,
     creates a booking with status 'pending' and reserves those timeslots.
+    For editing, if a GET parameter "edit" is provided, the form is
+    prepopulated with the existing booking's data. On POST, if the time or
+    date is changed, the existing booking is canceled and a new one is
+    created.
     """
     services_qs = Service.objects.all()
+
+    # Check if this is an edit request by looking for an "edit" GET parameter.
+    edit_booking = None
+    if 'edit' in request.GET:
+        booking_id = request.GET.get('edit')
+        edit_booking = get_object_or_404(
+            Booking, pk=booking_id, user=request.user)
 
     if request.method == "POST":
         service_id = request.POST.get("service")
@@ -104,6 +115,12 @@ def book_now(request):
             )
             return redirect("book_now")
 
+        # If editing, cancel the existing booking.
+        if edit_booking:
+            edit_booking.status = "cancelled"
+            edit_booking.save()
+
+        # NEW: Create a new booking instance and save it to get a primary key.
         booking = Booking(user=request.user, service=service, status="pending")
         booking.save()
         booking.timeslots.set(slots_to_book)
@@ -112,13 +129,11 @@ def book_now(request):
             slot.save()
 
         messages.success(
-            request,
-            "Booking request received. Await confirmation."
-        )
+            request, "Booking request received. Await confirmation.")
         return redirect("profile")
 
-    # Build a dictionary of available timeslots grouped by date
-    # Filter out passed timeslots.
+    # Build a dictionary of available timeslots grouped by date.
+    # Filter out timeslots that have already passed today.
     timeslots_by_date = defaultdict(list)
     today = date.today()
     current_time = datetime.now().time()
@@ -130,10 +145,22 @@ def book_now(request):
         timeslots_by_date[str(slot.date)].append(
             slot.start_time.strftime("%H:%M"))
 
-    return render(request, "booking.html", {
+    # Prepopulate initial form data if editing.
+    initial = {}
+    if edit_booking:
+        slots = edit_booking.timeslots.all().order_by("start_time")
+        if slots.exists():
+            initial["service"] = edit_booking.service.id
+            initial["date"] = slots.first().date.strftime("%Y-%m-%d")
+            initial["time"] = slots.first().start_time.strftime("%H:%M")
+
+    context = {
         "services": services_qs,
-        "timeslots_by_date": dict(timeslots_by_date)
-    })
+        "timeslots_by_date": dict(timeslots_by_date),
+        "initial": initial,
+        "edit_booking": edit_booking,
+    }
+    return render(request, "booking.html", context)
 
 
 def register(request):
@@ -172,13 +199,13 @@ def register(request):
 @login_required
 def profile(request):
     """
-    Custom profile view for displaying the logged-in user's account details
-    and their bookings. Retrieves all bookings for the user and separates
-    them into upcoming and past bookings based on the current date.
+    Custom profile view for displaying the logged-in user's account details and
+    their bookings. Retrieves all bookings for the user and separates them into
+    upcoming and past bookings based on the current date.
     """
-    # Retrieve all bookings for the current user
-    all_bookings = Booking.objects.filter(
-        user=request.user).order_by('timeslots__date')
+    all_bookings = Booking.objects.filter(user=request.user).exclude(
+        status='cancelled'
+    ).distinct().order_by('timeslots__date')
     today = date.today()
     # Separate bookings into upcoming and past
     upcoming_bookings = all_bookings.filter(timeslots__date__gte=today)
@@ -208,3 +235,17 @@ def services(request):
     if not services_qs.exists():
         messages.warning(request, "No services available at this time.")
     return render(request, 'services.html', {'services': services_qs})
+
+
+@login_required
+def booking_cancel(request, booking_id):
+    """
+    Cancel a booking. This view checks that the booking belongs to the
+    current user, marks its status as "cancelled", and updates timeslot
+    statuses accordingly. It then redirects back to the profile page.
+    """
+    booking = get_object_or_404(Booking, pk=booking_id, user=request.user)
+    booking.status = "cancelled"
+    booking.save()
+    messages.success(request, "Booking cancelled successfully.")
+    return redirect("profile")
