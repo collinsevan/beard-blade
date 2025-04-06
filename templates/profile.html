@@ -69,9 +69,14 @@
                                         Leave Review
                                     </a>
                                     {% else %}
-                                    <a href="{% url 'edit_review' booking.review.id %}" class="btn btn-gray btn-sm">
+                                    <a href="{% url 'edit_review' booking.review.id %}"
+                                        class="btn btn-gray btn-sm me-2">
                                         Edit Review
                                     </a>
+                                    <button type="button" class="btn btn-brown btn-sm" data-bs-toggle="modal"
+                                        data-bs-target="#confirmDeleteModal" data-review-id="{{ booking.review.id }}">
+                                        Delete Review
+                                    </button>
                                     {% endif %}
                                     {% endif %}
                                 </div>
@@ -132,6 +137,7 @@
                 </div>
             </div>
         </div>
+
         <!-- Change Password Button -->
         <div class="text-center mt-4">
             <a href="{% url 'password_change' %}" id="profile-password-btn"

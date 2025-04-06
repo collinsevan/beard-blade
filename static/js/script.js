@@ -95,6 +95,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         }
     }
+
     // Delete Review modal
     var confirmDeleteModal = document.getElementById("confirmDeleteModal");
     if (confirmDeleteModal) {
@@ -105,4 +106,36 @@ document.addEventListener("DOMContentLoaded", function () {
             form.action = "/review/delete/" + reviewId + "/";
         });
     }
+
+    // Star Rating: Maintain selected highlighting by targeting the parent label element
+    const starContainers = document.querySelectorAll(".star-rating-container");
+    starContainers.forEach(function (container) {
+        const radios = container.querySelectorAll("input[type='radio']");
+        // Set initial selected state on page load.
+        radios.forEach(function (radio) {
+            if (radio.checked) {
+                let label = radio.parentElement;
+                if (label && label.tagName.toLowerCase() === 'label') {
+                    label.classList.add("selected-star");
+                }
+            }
+        });
+        // Listen for changes on each radio.
+        radios.forEach(function (radio) {
+            radio.addEventListener("change", function () {
+                radios.forEach(function (r) {
+                    let lbl = r.parentElement;
+                    if (lbl && lbl.tagName.toLowerCase() === 'label') {
+                        lbl.classList.remove("selected-star");
+                    }
+                });
+                if (this.checked) {
+                    let label = this.parentElement;
+                    if (label && label.tagName.toLowerCase() === 'label') {
+                        label.classList.add("selected-star");
+                    }
+                }
+            });
+        });
+    });
 });

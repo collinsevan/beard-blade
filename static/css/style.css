@@ -55,11 +55,11 @@ p {
     border: none !important;
     transition: background-color 0.3s ease !important;
     font-family: "Merriweather", sans-serif
-  }
-  
-  .btn-gray:hover {
+}
+
+.btn-gray:hover {
     background-color: #5a6268 !important;
-  }
+}
 
 
 /* Home Page Background Image */
@@ -240,6 +240,35 @@ footer {
     background-color: rgb(60, 60, 60);
     color: white;
     border: 1px solid #444;
+}
+
+/* Star Rating Widget */
+.star-rating-container {
+    display: inline-flex;
+    gap: 1rem;
+    font-size: 2rem;
+}
+
+.star-rating-container input[type="radio"] {
+    display: none;
+}
+
+.star-rating-container label {
+    color: #ccc;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.star-rating-container label:hover {
+    color: #FFD700;
+}
+
+.star-rating-container input[type="radio"]:checked + label {
+    color: #FFD700;
+}
+
+.star-rating-container label.selected-star {
+    color: #FFD700;
 }
 
 /* Media Query for Smaller Screens */

@@ -217,29 +217,40 @@ def register(request):
 @login_required
 def profile(request):
     """
-    Custom profile view for displaying the logged-in user's account details and
-    their bookings. Retrieves all bookings for the user and separates them into
-    upcoming and past bookings based on the current date.
+    Custom profile view for displaying the logged-in user's account details
+    and their bookings. Retrieves all bookings for the user, lazy-updates up
+    to 50 confirmed bookings to 'completed' if their earliest timeslot is in
+    the past, and separates bookings into upcoming and past using the actual
+    end datetime.
     """
-    today = timezone.now().date()
+    now = timezone.now()
 
     confirmed_bookings = Booking.objects.filter(
         user=request.user, status='confirmed'
     ).order_by('timeslots__date')[:50]
+
     for booking in confirmed_bookings:
-        booking_date = booking.get_date()
-        if booking_date and booking_date < today:
+        end_dt = booking.get_end_datetime()
+        if end_dt and end_dt < now:
             booking.status = 'completed'
             booking.save()
 
-    all_bookings = Booking.objects.filter(user=request.user).exclude(
-        status='cancelled'
-    ).distinct().order_by('timeslots__date')
+    all_bookings = Booking.objects.filter(
+        user=request.user
+    ).exclude(status='cancelled').distinct().order_by('timeslots__date')
 
-    # Separate bookings into upcoming and past
-    upcoming_bookings = all_bookings.filter(timeslots__date__gte=today)
-    past_bookings = all_bookings.filter(timeslots__date__lt=today)
+    upcoming_bookings = []
+    past_bookings = []
+
+    for booking in all_bookings:
+        end_dt = booking.get_end_datetime()
+        if end_dt and end_dt < now:
+            past_bookings.append(booking)
+        else:
+            upcoming_bookings.append(booking)
+
     user_reviews = request.user.reviews.all()
+
     context = {
         'username': request.user.username,
         'upcoming_bookings': upcoming_bookings,

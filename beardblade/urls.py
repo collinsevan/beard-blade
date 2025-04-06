@@ -38,4 +38,5 @@ urlpatterns = [
          barber_views.create_review, name='create_review'),
     path('review/edit/<int:review_id>/',
          barber_views.edit_review, name='edit_review'),
+    path("ratings/", include("star_ratings.urls", namespace="ratings")),
 ]
