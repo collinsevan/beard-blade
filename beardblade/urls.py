@@ -26,4 +26,9 @@ urlpatterns = [
         name="booking_cancel",
     ),
     path('reviews/', barber_views.reviews, name='reviews'),
+    path(
+        'review/delete/<int:review_id>/',
+        barber_views.delete_review,
+        name='delete_review',
+    ),
 ]

@@ -276,3 +276,19 @@ def reviews(request):
     all_reviews = Review.objects.all().order_by('-created_at')
     context = {'all_reviews': all_reviews}
     return render(request, 'reviews.html', context)
+
+
+@login_required
+def delete_review(request, review_id):
+    """
+    Delete a review created by the logged-in user.
+    Handles POST requests to delete the review,
+    Then redirects to the profile page.
+    If accessed via GET, renders a confirmation page.
+    """
+    review = get_object_or_404(Review, pk=review_id, user=request.user)
+    if request.method == "POST":
+        review.delete()
+        messages.success(request, "Review deleted successfully.")
+        return redirect("profile")
+    return render(request, "delete_review.html", {"review": review})

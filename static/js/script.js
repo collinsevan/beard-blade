@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (dateSelect) {
             dateSelect.addEventListener("change", function () {
                 if (!timeslotsByDate[this.value]) {
-                    // Trigger the Bootstrap modal instead of an alert
+                    // Trigger the Bootstrap modal instead
                     const modalElement = document.getElementById("noTimeSlotsModal");
                     const noTimeSlotsModal = new bootstrap.Modal(modalElement);
                     noTimeSlotsModal.show();
@@ -94,5 +94,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             });
         }
+    }
+    // Delete Review modal
+    var confirmDeleteModal = document.getElementById("confirmDeleteModal");
+    if (confirmDeleteModal) {
+        confirmDeleteModal.addEventListener("show.bs.modal", function (event) {
+            var button = event.relatedTarget;
+            var reviewId = button.getAttribute("data-review-id");
+            var form = document.getElementById("deleteReviewForm");
+            form.action = "/review/delete/" + reviewId + "/";
+        });
     }
 });

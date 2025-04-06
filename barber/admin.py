@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Service, TimeSlot, Booking, OpeningHours
+from .models import Service, TimeSlot, Booking, OpeningHours, Review
 
 """
 Admin configuration for the barber app.
@@ -61,3 +61,18 @@ class OpeningHoursAdmin(admin.ModelAdmin):
 
 
 admin.site.register(OpeningHours, OpeningHoursAdmin)
+
+
+class ReviewAdmin(admin.ModelAdmin):
+    """
+    Admin configuration for the Review model.
+    Displays the booking, user, rating, and created_at fields.
+    Provides filtering by rating and creation date, and enables searching
+    by username, service name, or comment content.
+    """
+    list_display = ('booking', 'user', 'rating', 'created_at')
+    list_filter = ('rating', 'created_at')
+    search_fields = ('user__username', 'booking__service__name', 'comment')
+
+
+admin.site.register(Review, ReviewAdmin)
