@@ -65,18 +65,10 @@
                                 <div>
                                     {% if booking.status == 'completed' %}
                                     {% if not booking.review %}
+                                    <!-- Only show "Leave Review" if no review exists -->
                                     <a href="{% url 'create_review' booking.id %}" class="btn btn-gray btn-sm">
                                         Leave Review
                                     </a>
-                                    {% else %}
-                                    <a href="{% url 'edit_review' booking.review.id %}"
-                                        class="btn btn-gray btn-sm me-2">
-                                        Edit Review
-                                    </a>
-                                    <button type="button" class="btn btn-brown btn-sm" data-bs-toggle="modal"
-                                        data-bs-target="#confirmDeleteModal" data-review-id="{{ booking.review.id }}">
-                                        Delete Review
-                                    </button>
                                     {% endif %}
                                     {% endif %}
                                 </div>
@@ -108,16 +100,13 @@
                         <li class="list-group-item bg-transparent text-white border-white">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
-                                    <strong>{{ review.booking.service.name }}</strong> -
-                                    {% ratings review %}
-                                    <br>
-                                    {{ review.comment }}
-                                    <br>
-                                    <small>
-                                        by {{ review.user.username }} on {{ review.created_at|date:"Y-m-d" }}
-                                    </small>
+                                    <!-- Show same booking info text -->
+                                    {{ review.booking.service.name }} on {{ review.booking.get_date }}
+                                    from {{ review.booking.get_time_range }}
+                                    - Status: {{ review.booking.status }}
                                 </div>
                                 <div>
+                                    <!-- Only Edit/Delete in My Reviews -->
                                     <a href="{% url 'edit_review' review.id %}" class="btn btn-brown btn-sm me-2">
                                         Edit
                                     </a>

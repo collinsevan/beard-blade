@@ -157,7 +157,7 @@ def book_now(request):
     current_time = datetime.now().time()
     available_slots = TimeSlot.objects.filter(status='available')
     for slot in available_slots:
-        # Check if time slot is earlier or equal to current time if not skip
+        # Check if time slot is earlier or equal to current time if so skip
         if slot.date == today and slot.start_time <= current_time:
             continue
         timeslots_by_date[str(slot.date)].append(
@@ -307,7 +307,7 @@ def delete_review(request, review_id):
     """
     Delete a review created by the logged-in user.
     Handles POST requests to delete the review,
-    Then redirects to the profile page.
+    then redirects to the profile page.
     If accessed via GET, renders a confirmation page.
     """
     review = get_object_or_404(Review, pk=review_id, user=request.user)
