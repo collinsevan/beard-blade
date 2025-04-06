@@ -50,6 +50,7 @@ INSTALLED_APPS = [
 # Cron job configuration for django-crontab
 CRONJOBS = [
     ('0 0 * * *', 'django.core.management.call_command', ['timeslots']),
+    ('0 * * * *', 'django.core.management.call_command', ['mark_completed']),
 ]
 
 
@@ -143,7 +144,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Dublin'
 
 USE_I18N = True
 

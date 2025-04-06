@@ -6,6 +6,8 @@ from django.utils.dateparse import parse_date
 from barber.models import Booking, Service, TimeSlot, Review
 from datetime import date, datetime, timedelta
 from collections import defaultdict
+from django.utils import timezone
+from .forms import ReviewForm
 from django.contrib.auth.views import (
     PasswordChangeView,
     PasswordChangeDoneView
@@ -219,10 +221,21 @@ def profile(request):
     their bookings. Retrieves all bookings for the user and separates them into
     upcoming and past bookings based on the current date.
     """
+    today = timezone.now().date()
+
+    confirmed_bookings = Booking.objects.filter(
+        user=request.user, status='confirmed'
+    ).order_by('timeslots__date')[:50]
+    for booking in confirmed_bookings:
+        booking_date = booking.get_date()
+        if booking_date and booking_date < today:
+            booking.status = 'completed'
+            booking.save()
+
     all_bookings = Booking.objects.filter(user=request.user).exclude(
         status='cancelled'
     ).distinct().order_by('timeslots__date')
-    today = date.today()
+
     # Separate bookings into upcoming and past
     upcoming_bookings = all_bookings.filter(timeslots__date__gte=today)
     past_bookings = all_bookings.filter(timeslots__date__lt=today)
@@ -292,3 +305,54 @@ def delete_review(request, review_id):
         messages.success(request, "Review deleted successfully.")
         return redirect("profile")
     return render(request, "delete_review.html", {"review": review})
+
+
+@login_required
+def create_review(request, booking_id):
+    """
+    Create a review for a completed booking.
+
+    Only allow review creation if the booking is completed and no review
+    exists. Display the ReviewForm with star rating and comment.
+    """
+    booking = get_object_or_404(Booking, pk=booking_id, user=request.user)
+    if booking.status != 'completed':
+        messages.error(request, "You can only review a completed booking.")
+        return redirect("profile")
+    if hasattr(booking, 'review'):
+        messages.info(request,
+                      "This booking already has a review. Please edit it.")
+        return redirect("edit_review", review_id=booking.review.id)
+    if request.method == "POST":
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.booking = booking
+            review.user = request.user
+            review.save()
+            messages.success(request, "Review submitted successfully.")
+            return redirect("profile")
+    else:
+        form = ReviewForm()
+    return render(request, "review_form.html",
+                  {"form": form, "booking": booking})
+
+
+@login_required
+def edit_review(request, review_id):
+    """
+    Edit an existing review.
+
+    Display the ReviewForm prepopulated with the existing review data.
+    """
+    review = get_object_or_404(Review, pk=review_id, user=request.user)
+    if request.method == "POST":
+        form = ReviewForm(request.POST, instance=review)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Review updated successfully.")
+            return redirect("profile")
+    else:
+        form = ReviewForm(instance=review)
+    return render(request, "review_form.html",
+                  {"form": form, "booking": review.booking})

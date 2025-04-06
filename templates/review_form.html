@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Review - Beard & Blade{% endblock %}
+
+{% block content %}
+<section class="container mt-4">
+  <h2 class="text-white">
+    Review for {{ booking.service.name }} on {{ booking.get_date }} from {{ booking.get_time_range }}
+  </h2>
+  <form method="post" class="p-4" style="background-color: rgb(60, 60, 60); border-radius: 5px;">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label class="form-label text-white">Star Rating</label>
+      {{ form.rating }}
+    </div>
+    <div class="mb-3">
+      <label class="form-label text-white">Comment</label>
+      {{ form.comment }}
+    </div>
+    <button type="submit" class="btn btn-brown">Submit Review</button>
+  </form>
+</section>
+{% endblock %}

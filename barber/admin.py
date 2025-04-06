@@ -29,6 +29,7 @@ class BookingAdmin(admin.ModelAdmin):
     )
     list_filter = ("status", "created_at")
     search_fields = ("user__username", "service__name")
+    actions = ["confirm_bookings", "decline_bookings"]
 
     def display_timeslots(self, obj):
         """
@@ -39,6 +40,26 @@ class BookingAdmin(admin.ModelAdmin):
             [f"{slot.date} {slot.start_time}" for slot in obj.timeslots.all()]
         )
     display_timeslots.short_description = "Time Slots"
+
+    def confirm_bookings(self, request, queryset):
+        """Confirm selected bookings by updating their status to confirmed
+        and marking associated timeslots as booked.
+        """
+        queryset.update(status="confirmed")
+        for booking in queryset:
+            booking.timeslots.update(status="booked")
+
+    confirm_bookings.short_description = "Confirm selected bookings"
+
+    def decline_bookings(self, request, queryset):
+        """Decline selected bookings by updating their status to cancelled
+        and reverting associated timeslots to available.
+        """
+        queryset.update(status="cancelled")
+        for booking in queryset:
+            booking.timeslots.update(status="available")
+
+    decline_bookings.short_description = "Decline selected bookings"
 
 
 admin.site.register(Booking, BookingAdmin)

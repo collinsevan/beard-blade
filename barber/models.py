@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import datetime
+from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
@@ -129,6 +130,7 @@ class Booking(models.Model):
     STATUS_CHOICES = [
         ('pending', 'Pending'),
         ('confirmed', 'Confirmed'),
+        ('completed', 'Completed'),
         ('cancelled', 'Cancelled'),
     ]
     user = models.ForeignKey(
@@ -231,6 +233,19 @@ class Booking(models.Model):
         start_time = slots.first().start_time.strftime("%H:%M")
         end_time = slots.last().end_time.strftime("%H:%M")
         return f"{start_time} - {end_time}"
+
+    def get_end_datetime(self):
+        """
+        Return an aware datetime for the end time of the booking,
+        based on the last timeslot's end time. If no timeslots exist,
+        return None.
+        """
+        slots = self.timeslots.all().order_by('start_time')
+        if slots.exists():
+            last_slot = slots.last()
+            naive_dt = datetime.combine(last_slot.date, last_slot.end_time)
+            return timezone.make_aware(naive_dt)
+        return None
 
 
 class Review(models.Model):

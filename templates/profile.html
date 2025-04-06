@@ -15,6 +15,7 @@
                 <p class="text-white">Manage your bookings and reviews below.</p>
             </div>
         </div>
+
         <!-- My Bookings Section -->
         <div class="row">
             <div class="col">
@@ -50,13 +51,31 @@
                     {% else %}
                     <p class="text-white">No upcoming bookings.</p>
                     {% endif %}
+
                     {% if past_bookings %}
                     <h5 class="text-white">Past Bookings</h5>
                     <ul class="list-group">
                         {% for booking in past_bookings %}
                         <li class="list-group-item bg-transparent text-white border-white">
-                            {{ booking.service.name }} on {{ booking.get_date }} from
-                            {{ booking.get_time_range }} - Status: {{ booking.status }}
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    {{ booking.service.name }} on {{ booking.get_date }} from
+                                    {{ booking.get_time_range }} - Status: {{ booking.status }}
+                                </div>
+                                <div>
+                                    {% if booking.status == 'completed' %}
+                                    {% if not booking.review %}
+                                    <a href="{% url 'create_review' booking.id %}" class="btn btn-gray btn-sm">
+                                        Leave Review
+                                    </a>
+                                    {% else %}
+                                    <a href="{% url 'edit_review' booking.review.id %}" class="btn btn-gray btn-sm">
+                                        Edit Review
+                                    </a>
+                                    {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
                         </li>
                         {% endfor %}
                     </ul>
@@ -66,6 +85,7 @@
                 </div>
             </div>
         </div>
+
         <!-- My Reviews Section -->
         <div class="row mt-4">
             <div class="col">

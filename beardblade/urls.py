@@ -2,7 +2,10 @@ from django.contrib import admin
 from django.urls import path, include
 from barber import views as barber_views
 from django.contrib.auth import views as auth_views
-from barber.views import CustomPasswordChangeView, CustomPasswordChangeDoneView
+from barber.views import (
+    CustomPasswordChangeView,
+    CustomPasswordChangeDoneView
+)
 
 urlpatterns = [
     path('', barber_views.home, name='home'),
@@ -31,4 +34,8 @@ urlpatterns = [
         barber_views.delete_review,
         name='delete_review',
     ),
+    path('review/create/<int:booking_id>/',
+         barber_views.create_review, name='create_review'),
+    path('review/edit/<int:review_id>/',
+         barber_views.edit_review, name='edit_review'),
 ]
