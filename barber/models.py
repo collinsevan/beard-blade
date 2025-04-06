@@ -4,6 +4,8 @@ from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.fields import GenericRelation
+from star_ratings.models import Rating as StarRating
 
 """
 Service model for storing details about the barber's offerings.
@@ -269,6 +271,7 @@ class Review(models.Model):
     comment = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    ratings = GenericRelation(StarRating, related_query_name='ratings')
 
     def clean(self):
         """

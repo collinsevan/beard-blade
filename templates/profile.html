@@ -65,7 +65,6 @@
                                 <div>
                                     {% if booking.status == 'completed' %}
                                     {% if not booking.review %}
-                                    <!-- Only show "Leave Review" if no review exists -->
                                     <a href="{% url 'create_review' booking.id %}" class="btn btn-gray btn-sm">
                                         Leave Review
                                     </a>

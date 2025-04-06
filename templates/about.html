@@ -59,15 +59,21 @@
       {% for review in random_reviews %}
       <li class="list-group-item bg-transparent text-white border-white">
         <div>
-          <strong>{{ review.booking.service.name }}</strong> -
-
-          {% ratings review %}
+          <!-- Read-only Star Display -->
+          <div class="star-rating-container read-only">
+            {% for i in "12345" %}
+            {% if forloop.counter <= review.rating %}
+            <label class="selected-star">&#9733;</label>
+            {% else %}
+            <label>&#9733;</label>
+            {% endif %}
+            {% endfor %}
+          </div>
           <br>
           {{ review.comment }}
           <br>
           <small>
-            by {{ review.user.username }} on
-            {{ review.created_at|date:"Y-m-d" }}
+            by {{ review.user.username }} on {{ review.created_at|date:"Y-m-d" }}
           </small>
         </div>
       </li>

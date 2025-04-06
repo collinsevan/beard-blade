@@ -263,12 +263,21 @@ footer {
     color: #FFD700;
 }
 
-.star-rating-container input[type="radio"]:checked + label {
+.star-rating-container input[type="radio"]:checked+label {
     color: #FFD700;
 }
 
 .star-rating-container label.selected-star {
     color: #FFD700;
+}
+
+.star-rating-container.read-only label:hover {
+    color: inherit;
+    cursor: default;
+}
+
+.star-rating-container.read-only {
+    pointer-events: none;
 }
 
 /* Media Query for Smaller Screens */

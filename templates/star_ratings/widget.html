@@ -1,0 +1,10 @@
+{% load i18n static %}
+{% if rating %}
+  <div class="my-custom-rating-text">
+    Rated: {{ rating.average|floatformat:"0" }}
+  </div>
+{% else %}
+  <div class="my-custom-rating-text">
+    Not rated
+  </div>
+{% endif %}
