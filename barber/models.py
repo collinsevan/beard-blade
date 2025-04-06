@@ -154,14 +154,12 @@ class Booking(models.Model):
         """
         Validate that the booking has contiguous time slots that match
         the service duration. Also, ensure that all selected time slots
-        are available.
+        are available, or if not available, already belong to this booking.
         """
         total_required_minutes = (
             self.service.duration.total_seconds() / 60
         )
         required_slots = int(total_required_minutes / 15)
-        # Validate many-to-many fields if the instance is saved
-        # and timeslots exist.
         if self.pk and self.timeslots.exists():
             if self.timeslots.count() != required_slots:
                 raise ValidationError(
@@ -180,10 +178,12 @@ class Booking(models.Model):
                                                  slots[i].start_time)
                 if current_start != prev_end:
                     raise ValidationError(
-                        "Selected time slots are not contiguous."
-                    )
+                        "Selected time slots are not contiguous.")
             for slot in slots:
                 if slot.status != 'available':
+                    # Allow the slot if it belongs to this booking.
+                    if self.pk and slot.bookings.filter(pk=self.pk).exists():
+                        continue
                     raise ValidationError(
                         "One or more selected time slots are not available."
                     )
@@ -250,13 +250,15 @@ class Booking(models.Model):
         return None
 
 
+"""
+Review model stores feedback for a completed booking.
+Each review is linked to a booking (OneToOne) so each booking has one
+review at most. It has a rating (1-5) and an optional comment.
+Timestamps are auto-set on creation and update.
+"""
+
+
 class Review(models.Model):
-    """
-    Review model stores feedback for a completed booking.
-    Each review is linked to a booking (OneToOne) so each booking has one
-    review at most. It has a rating (1-5) and an optional comment.
-    Timestamps are auto-set on creation and update.
-    """
     booking = models.OneToOneField(
         'Booking', on_delete=models.CASCADE, related_name="review"
     )

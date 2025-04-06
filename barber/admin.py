@@ -20,7 +20,7 @@ class BookingAdmin(admin.ModelAdmin):
     """
     Admin configuration for the Booking model.
     This allows the barber to manage bookings, including
-    confirming or canceling them.
+    confirming or canceling them, with a cleaner editing form.
     """
     list_display = (
         "user",
@@ -32,6 +32,17 @@ class BookingAdmin(admin.ModelAdmin):
     list_filter = ("status", "created_at")
     search_fields = ("user__username", "service__name")
     actions = ["confirm_bookings", "decline_bookings"]
+    filter_horizontal = ("timeslots",)
+    readonly_fields = ("created_at", "updated_at")
+    fieldsets = (
+        (None, {
+            "fields": ("user", "service", "timeslots", "status")
+        }),
+        ("Timestamps", {
+            "fields": ("created_at", "updated_at"),
+            "classes": ("collapse",),
+        }),
+    )
 
     def display_timeslots(self, obj):
         """
