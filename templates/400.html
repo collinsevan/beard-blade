@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block body_class %}error-page{% endblock %}
+{% block content %}
+<style>
+    nav {
+        display: none !important;
+    }
+</style>
+<div class="container text-center" style="min-height: 80vh; margin-top: 100px;">
+    <h1 class="text-white">400 - Bad Request</h1>
+    <p class="text-white">Sorry, your request could not be understood due to malformed syntax.</p>
+    <a href="{% url 'home' %}" class="btn btn-brown">Return Home</a>
+</div>
+{% endblock %}

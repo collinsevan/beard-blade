@@ -367,3 +367,48 @@ def edit_review(request, review_id):
         form = ReviewForm(instance=review)
     return render(request, "review_form.html",
                   {"form": form, "booking": review.booking})
+
+
+# Built-in Django error handlers
+def custom_bad_request(request, exception):
+    return render(request, '400.html', status=400)
+
+
+def custom_permission_denied(request, exception):
+    return render(request, '403.html', status=403)
+
+
+def custom_page_not_found(request, exception):
+    return render(request, '404.html', status=404)
+
+
+def custom_server_error(request):
+    return render(request, '500.html', status=500)
+
+
+def custom_unauthorized(request, exception):
+    return render(request, '401.html', status=401)
+
+
+def custom_method_not_allowed(request, exception):
+    return render(request, '405.html', status=405)
+
+
+def custom_gone(request, exception):
+    return render(request, '410.html', status=410)
+
+
+def custom_too_many_requests(request, exception):
+    return render(request, '429.html', status=429)
+
+
+def custom_bad_gateway(request, exception):
+    return render(request, '502.html', status=502)
+
+
+def custom_service_unavailable(request, exception):
+    return render(request, '503.html', status=503)
+
+
+def custom_gateway_timeout(request, exception):
+    return render(request, '504.html', status=504)

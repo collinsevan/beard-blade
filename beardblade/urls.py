@@ -40,3 +40,9 @@ urlpatterns = [
          barber_views.edit_review, name='edit_review'),
     path("ratings/", include("star_ratings.urls", namespace="ratings")),
 ]
+
+
+handler400 = 'barber.views.custom_bad_request'
+handler403 = 'barber.views.custom_permission_denied'
+handler404 = 'barber.views.custom_page_not_found'
+handler500 = 'barber.views.custom_server_error'

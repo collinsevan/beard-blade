@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block body_class %}error-page{% endblock %}
+{% block content %}
+<style>
+    /* Hide the navbar on error pages */
+    nav {
+        display: none !important;
+    }
+</style>
+<div class="container text-center" style="min-height: 80vh; margin-top: 100px;">
+    <h1 class="text-white">410 - Gone</h1>
+    <p class="text-white">Sorry, the page you are looking for is no longer available and has been permanently removed.
+    </p>
+    <a href="{% url 'home' %}" class="btn btn-brown">Return Home</a>
+</div>
+{% endblock %}
