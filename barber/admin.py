@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django import forms
+from django.utils.safestring import mark_safe
 from .models import Service, TimeSlot, Booking, OpeningHours, Review
 
 """
@@ -84,6 +86,45 @@ class OpeningHoursAdmin(admin.ModelAdmin):
 admin.site.register(OpeningHours, OpeningHoursAdmin)
 
 
+class AdminStarRatingWidget(forms.RadioSelect):
+    """
+    A custom widget that renders a star rating input for the admin.
+    It creates 5 hidden radio inputs and clickable labels showing star icons.
+    """
+
+    def render(self, name, value, attrs=None, renderer=None):
+        if value is None:
+            value = ''
+        output = ['<div class="star-rating-container">']
+        for i in range(1, 6):
+            checked = ' checked="checked"' if str(i) == str(value) else ''
+            output.append(
+                (
+                    f'<input type="radio" name="{name}" value="{i}" '
+                    f'id="{name}_{i}" style="display:none;"{checked}>'
+                )
+            )
+            output.append(
+                (
+                    f'<label for="{name}_{i}" style="cursor:pointer;">'
+                    f'&#9733;</label>'
+                )
+            )
+        output.append('</div>')
+        return mark_safe(''.join(output))
+
+
+class ReviewAdminForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = '__all__'
+        widgets = {
+            'rating': AdminStarRatingWidget(
+                choices=[(i, i) for i in range(1, 6)]
+            ),
+        }
+
+
 class ReviewAdmin(admin.ModelAdmin):
     """
     Admin configuration for the Review model.
@@ -91,6 +132,7 @@ class ReviewAdmin(admin.ModelAdmin):
     Provides filtering by rating and creation date, and enables searching
     by username, service name, or comment content.
     """
+    form = ReviewAdminForm
     list_display = ('booking', 'user', 'rating', 'created_at')
     list_filter = ('rating', 'created_at')
     search_fields = ('user__username', 'booking__service__name', 'comment')
