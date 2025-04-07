@@ -88,13 +88,11 @@ Follow these steps to deploy Beard & Blade to Heroku:
 7. **Run Database Migrations:**  
    Run: `heroku run python manage.py migrate`
 
-8. **(Optional) Create a Superuser:**  
+8. **Create a Superuser:**  
    Run: `heroku run python manage.py createsuperuser`
 
 9. **Open Your Deployed App:**  
    Run: `heroku open`
-
-
 
 ## Features
 
@@ -155,7 +153,9 @@ Follow these steps to deploy Beard & Blade to Heroku:
 
 Below is the project's color palette, as defined in the CSS and used across various templates:
 
-![Color Scheme](static/images/color_scheme.png)
+<div style="max-width:600px; margin:0 auto;">
+  <img src="static/images/color_scheme.png" alt="Color Scheme" style="max-width:100%; height:auto;">
+</div>
 
 ### Color Usage
 
@@ -197,7 +197,9 @@ Below is the project's color palette, as defined in the CSS and used across vari
 
 Below is the ER diagram representing the database schema for Beard & Blade:
 
-![Database Schema](static/images/schema.png)
+<div style="max-width:600px; margin:0 auto;">
+  <img src="static/images/schema.png" alt="Database Schema" style="max-width:100%; height:auto;">
+</div>
 
 ### Models and Relationships
 
@@ -263,7 +265,9 @@ Below are the wireframes for each major page of the Beard & Blade application. E
 
 ### Home Page Wireframe
 
-![Home Page Wireframe](static/images/home_wire.png)
+<div style="max-width:600px; margin:0">
+  <img src="static/images/home_wire.png" alt="Home Page Wireframe" style="max-width:100%; height:auto;">
+</div>
 
 - **Purpose:** Introduces users to Beard & Blade with a hero section and prominent call-to-action button.
 - **Layout Highlights:**
@@ -335,7 +339,9 @@ Below are the wireframes for each major page of the Beard & Blade application. E
    - Utilized custom management commands (`timeslots.py` for generating timeslots and `completed.py` for marking bookings completed) to automate backend processes.
 
    **Screenshot:**  
-   ![Service Browsing & Booking](static/images/service_user.png)
+<div style="max-width:600px; margin:0 auto;">
+  <img src="static/images/service_user.png" alt="Service Browsing & Booking" style="max-width:100%; height:auto;">
+</div>
 
 ---
 
@@ -348,7 +354,9 @@ Below are the wireframes for each major page of the Beard & Blade application. E
    - Developed the `profile.html` page to display the user’s current bookings (both upcoming and past) and reviews, with options to edit or cancel bookings and leave or update reviews.
 
    **Screenshot:**  
-   ![Account Management](static/images/account_user.png)
+<div style="max-width:600px; margin:0 auto;">
+  <img src="static/images/account_user.png" alt="Account Management" style="max-width:100%; height:auto;">
+</div>
 
 ---
 
@@ -361,8 +369,9 @@ Below are the wireframes for each major page of the Beard & Blade application. E
    - Implemented `create_review` and `edit_review` views to handle review submission and updates, ensuring proper validation and feedback.
 
    **Screenshot:**  
-   ![Review Submission](static/images/editrev_user.png)
-
+<div style="max-width:600px; margin:0 auto;">
+  <img src="static/images/editrev_user.png" alt="Review Submission" style="max-width:100%; height:auto;">
+</div>
 ---
 
 ### Admin Stories
@@ -376,7 +385,9 @@ Below are the wireframes for each major page of the Beard & Blade application. E
    - Added filtering, search, and custom display options in the admin for efficient booking management.
 
    **Screenshot:**  
-   ![Service & Booking Management](static/images/service&book_admin.png)
+<div style="max-width:600px; margin:0 auto;">
+  <img src="static/images/service&book_admin.png" alt="Service & Booking Management" style="max-width:100%; height:auto;">
+</div>
 
 ---
 
@@ -388,7 +399,9 @@ Below are the wireframes for each major page of the Beard & Blade application. E
    - Enabled filtering and searching of reviews by user, booking, or rating, making moderation straightforward.
 
    **Screenshot:**  
-   ![User Reviews Moderation](static/images/reviewmod_admin.png)
+<div style="max-width:600px; margin:0 auto;">
+  <img src="static/images/reviewmod_admin.png" alt="User Reviews Moderation" style="max-width:100%; height:auto;">
+</div>
 
 ---
 
@@ -400,7 +413,9 @@ Below are the wireframes for each major page of the Beard & Blade application. E
    - Leveraged these settings in the `timeslots.py` management command to generate 15-minute timeslots based on the defined operating hours.
 
    **Screenshot:**  
-   ![Operating Hours Setup](static/images/operationhour_admin.png)
+<div style="max-width:600px; margin:0 auto;">
+  <img src="static/images/operationhour_admin.png" alt="Operating Hours Setup" style="max-width:100%; height:auto;">
+</div>
 
 ---
 
@@ -439,25 +454,40 @@ We have tested every page of Beard & Blade using Google Lighthouse. All pages sc
 **Lighthouse Test Screenshots:**
 
 - **Home Page:**  
-  ![Lighthouse Home Page](static/images/lighthouse_home.png)
+<div style="max-width:600px; margin:0 auto;">
+    <img src="static/images/lighthouse_home.png" alt="Lighthouse Home Page" style="max-width:100%; height:auto;">
+</div>
   
 - **Services Page:**  
-  ![Lighthouse Services Page](static/images/lighthouse_services.png)
+<div style="max-width:600px; margin:0 auto;">
+    <img src="static/images/lighthouse_services.png" alt="Lighthouse Services Page" style="max-width:100%; height:auto;">
+</div>
   
 - **About Page:**  
-  ![Lighthouse About Page](static/images/lighthouse_about.png)
+<div style="max-width:600px; margin:0 auto;">
+    <img src="static/images/lighthouse_about.png" alt="Lighthouse About Page" style="max-width:100%; height:auto;">
+</div>
   
 - **Login Page:**  
-  ![Lighthouse Login Page](static/images/lighthouse_account.png)
+<div style="max-width:600px; margin:0 auto;">
+    <img src="static/images/lighthouse_account.png" alt="Lighthouse Login Page" style="max-width:100%; height:auto;">
+</div>
   
 - **Registration Page:**  
-  ![Lighthouse Registration Page](static/images/lighthouse_register.png)
+  <div style="max-width:600px; margin:0 auto;">
+    <img src="static/images/lighthouse_register.png" alt="Lighthouse Registration Page" style="max-width:100%; height:auto;">
+  </div>
   
 - **Review Edit Page:**  
-  ![Lighthouse Profile Page](static/images/lighthouse_reviewedit.png)
+  <div style="max-width:600px; margin:0 auto;">
+    <img src="static/images/lighthouse_reviewedit.png" alt="Lighthouse Review Edit Page" style="max-width:100%; height:auto;">
+  </div>
+
 
 - **Review Page:**  
-  ![Lighthouse Profile Page](static/images/lighthouse_review.png)
+  <div style="max-width:600px; margin:0 auto;">
+    <img src="static/images/lighthouse_review.png" alt="Lighthouse Review Page" style="max-width:100%; height:auto;">
+  </div>
 
 Each screenshot represents a successful Lighthouse report, demonstrating our commitment to high quality and efficient performance across the application.
 
@@ -538,7 +568,9 @@ All manually tested features—including user registration, login, password rese
 - **Rated Score Display Issue:**  
   After selecting a rating score, the "Rated" field shows "0" instead of reflecting the chosen or computed average score.
 
-![Bug picture](static/images/bug.png)
+<div style="max-width:600px; margin:0 auto;">
+  <img src="static/images/bug.png" alt="Bug picture" style="max-width:100%; height:auto;">
+</div>
 
 - **Logout Confirmation Issue:**  
   When canceling on the logout confirmation ("Are you sure?") page, the user is unexpectedly logged out instead of staying logged in.
