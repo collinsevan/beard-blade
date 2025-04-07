@@ -2,7 +2,6 @@
 {% load static %}
 {% load ratings %}
 
-
 {% block title %}Reviews - Beard & Blade{% endblock %}
 
 {% block content %}
@@ -10,25 +9,31 @@
   <h2 class="text-white text-center mb-4">Reviews</h2>
   <hr class="text-white">
   {% if all_reviews %}
-    <ul class="list-group">
-      {% for review in all_reviews %}
-      <li class="list-group-item bg-transparent text-white border-white">
-        <div>
-          <strong>{{ review.booking.service.name }}</strong> - 
-          {% ratings review %}
-          <br>
-          {{ review.comment }}
-          <br>
-          <small>
-              by {{ review.user.username }} on 
-              {{ review.created_at|date:"Y-m-d" }}
-          </small>
+  <ul class="list-group">
+    {% for review in all_reviews %}
+    <li class="list-group-item bg-transparent text-white border-white">
+      <div>
+        <strong>{{ review.booking.service.name }}</strong> -
+        <div class="star-rating-container read-only">
+          {% for i in "12345" %}
+          {% if forloop.counter <= review.rating %} <label class="selected-star">&#9733;</label>
+            {% else %}
+            <label>&#9733;</label>
+            {% endif %}
+            {% endfor %}
         </div>
-      </li>
-      {% endfor %}
-    </ul>
+        <br>
+        {{ review.comment }}
+        <br>
+        <small>
+          by {{ review.user.username }} on {{ review.created_at|date:"Y-m-d" }}
+        </small>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
   {% else %}
-    <p class="text-white text-center">No reviews yet.</p>
+  <p class="text-white text-center">No reviews yet.</p>
   {% endif %}
 </section>
 {% endblock %}
