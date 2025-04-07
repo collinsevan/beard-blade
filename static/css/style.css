@@ -54,13 +54,12 @@ p {
     color: var(--professional-white) !important;
     border: none !important;
     transition: background-color 0.3s ease !important;
-    font-family: "Merriweather", sans-serif
+    font-family: "Merriweather", sans-serif;
 }
 
 .btn-gray:hover {
     background-color: #5a6268 !important;
 }
-
 
 /* Home Page Background Image */
 .home-page {
@@ -128,7 +127,6 @@ footer {
     height: 100%;
     object-fit: cover;
 }
-
 
 /* Logout Styling */
 #logout-page {
@@ -275,15 +273,15 @@ footer {
 }
 
 .star-rating-container label:hover {
-    color: #FFD700;
+    color: #ffd700;
 }
 
 .star-rating-container input[type="radio"]:checked+label {
-    color: #FFD700;
+    color: #ffd700;
 }
 
 .star-rating-container label.selected-star {
-    color: #FFD700;
+    color: #ffd700;
 }
 
 .star-rating-container.read-only label:hover {
