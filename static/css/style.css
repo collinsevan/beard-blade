@@ -108,12 +108,26 @@ footer {
     font-size: 1.25rem;
 }
 
-#about-establishment-img {
-    width: 250px !important;
-    height: 250px !important;
+.about-img-circle {
+    width: 250px;
+    height: 250px;
     object-fit: cover;
-    border-radius: 50% !important;
+    border-radius: 50%; 
 }
+
+.about-img-circle-wrapper {
+    width: 100%;
+    max-width: 300px;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+  .about-img-circle-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
 
 /* Logout Styling */
 #logout-page {
@@ -287,3 +301,42 @@ footer {
         backdrop-filter: blur(10px);
     }
 }
+
+@media (min-width: 1440px) {
+    /* Increase overall base font-size */
+    html {
+      font-size: 18px;
+    }
+  
+    /* Headings */
+    h1 {
+      font-size: 3rem;
+    }
+    h2 {
+      font-size: 2.5rem;
+    }
+    h3 {
+      font-size: 2rem;
+    }
+    h4, h5, h6 {
+      font-size: 1.75rem;
+    }
+  
+    /* Increase body text and form elements */
+    p, a, li, input, button, label {
+      font-size: 1.125rem;
+    }
+  
+    /* Specifically scale up navigation text */
+    .navbar-nav .nav-link {
+      font-size: 1.125rem;
+    }
+    
+    .about-img-circle {
+        max-width: 300px;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        border-radius: 50%;
+    }    
+  }
+  
