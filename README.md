@@ -11,6 +11,7 @@ A premium barber services web application offering online booking, user reviews,
 - [Overview](#overview)
 - [Languages & Technologies](#languages--technologies)
 - [Installation & Setup](#installation--setup)
+- [Deployment](#Deployment)
 - [Features](#features)
 - [Color Scheme](#color-scheme)
 - [Database Schema](#database-schema)
@@ -34,24 +35,33 @@ Beard & Blade is a Django-based application that provides a premium barbering ex
 
 ## Installation & Setup
 
-Follow these steps to set up and run the Beard & Blade project on your local machine:
+1. **Activate the Virtual Environment:**  
+   Windows: `venv\Scripts\activate`  
+   macOS/Linux: `source venv/bin/activate`
 
-### Prerequisites
+2. **Install Dependencies:**  
+   Upgrade pip: `pip install --upgrade pip`  
+   Install required packages: `pip install -r requirements.txt`
 
-- **Python 3.8+**: Ensure you have Python installed. You can download it from [python.org](https://www.python.org/downloads/).
-- **Virtual Environment**: It is recommended to use a virtual environment to isolate your project dependencies.
-- **Database**: The project uses PostgreSQL in production (configured via dj_database_url). For local development, you can either use PostgreSQL or SQLite (if you modify the settings accordingly).
-- **Git**: Ensure Git is installed to clone the repository.
+3. **Configure Environment Variables:**  
+   Create an `env.py` file in the project root with the following content:  
+   ```python
+   import os
+   os.environ["SECRET_KEY"] = "your-secret-key"
+   os.environ["DATABASE_URL"] = "your-database-url"  # e.g., postgres://user:password@localhost:5432/dbname
+   os.environ["MAILJET_API_KEY"] = "your-mailjet-api-key"
+   os.environ["MAILJET_API_SECRET"] = "your-mailjet-api-secret"
 
-### Clone the Repository
+**Database Setup & Migrations:** Run: `python manage.py migrate` (Optional: Create superuser: `python manage.py createsuperuser`)
 
-1. Open your terminal or command prompt.
-2. Clone the repository:
+**Collect Static Files:** Run: `python manage.py collectstatic`
 
-   ```bash
-   git clone https://github.com/collinsevan/beard-blade
-   cd beard-blade
-   ```
+**Run Automated Tasks:**  
+Generate Timeslots: `python manage.py timeslots --days 7`  
+Mark Completed: `python manage.py mark_completed`
+
+**Running the Development Server:** Run: `python manage.py runserver`  
+Then visit [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser
 
 ## Features
 
@@ -486,3 +496,77 @@ Each screenshot represents a successful Lighthouse report, demonstrating our com
 ### Summary
 
 All manually tested features—including user registration, login, password reset, booking processes, timeslot generation, modal displays, and model validations—performed as expected. The application provides clear user feedback, robust error handling, and secure authentication, ensuring a smooth and reliable user experience.
+
+## Known Bugs
+
+- **Average Rating Issue:**  
+  The average rating currently displays as "1" instead of calculating the average across all submitted ratings.
+
+- **Rated Score Display Issue:**  
+  After selecting a rating score, the "Rated" field shows "0" instead of reflecting the chosen or computed average score.
+
+![Bug picture](static/images/bug.png)
+
+- **Logout Confirmation Issue:**  
+  When canceling on the logout confirmation ("Are you sure?") page, the user is unexpectedly logged out instead of staying logged in.
+
+These issues are known and are under investigation for future fixes.
+
+
+## References
+
+- **Django Documentation:**  
+  [Django Docs](https://docs.djangoproject.com/en/4.2/) – Official documentation for Django, covering topics like authentication, custom management commands, and deployment.
+
+- **Django Authentication & Authorization:**  
+  [Django Auth Documentation](https://docs.djangoproject.com/en/4.2/topics/auth/) – Details on user authentication, registration, and built-in views for login, logout, and password management.
+
+- **Navbar Implementation:**  
+  [Navbar Code Tutorial](https://www.youtube.com/watch?v=zOtxP7ahi4M) – YouTube tutorial for building a responsive navigation bar.
+
+- **Log In Flow:**  
+  [Log In Tutorial](https://www.youtube.com/watch?v=z-ITKWB7YyQ) – YouTube tutorial covering the login process using Django's authentication system.
+
+- **Automated Management Commands:**  
+  [Custom Management Commands](https://docs.djangoproject.com/en/4.2/howto/custom-management-commands/) – Official guide on creating and running Django management commands (e.g., timeslot generation and marking bookings completed).  
+  [django-crontab Documentation](https://pypi.org/project/django-crontab/) – Information on scheduling cron jobs with Django.
+
+- **Django Custom Management Commands Tutorial:**  
+  [Writing custom Django management commands](https://docs.djangoproject.com/en/4.2/howto/custom-management-commands/) – Official Django documentation on creating and using custom management commands.
+
+- **Django-Crontab Tutorial:**  
+  [django-crontab Documentation](https://pypi.org/project/django-crontab/) – Official PyPI page for django-crontab with installation, configuration, and usage instructions.
+
+- **Scheduling Cron Jobs in Django – Tutorial:**  
+  [Using Django-Crontab to schedule tasks](https://simpleisbetterthancomplex.com/tutorial/2016/08/22/how-to-schedule-django-cron-jobs.html) – A practical guide on how to set up and manage cron jobs in Django using django-crontab.
+
+- **Django Cron Jobs – Video Tutorial:**  
+  [How to Setup Cron Jobs in Django](https://www.youtube.com/watch?v=QULW6SbF-FE) – A YouTube tutorial demonstrating how to configure and run cron jobs in a Django application using django-crontab.
+
+- **Django Allauth:**  
+  [django-allauth Documentation](https://django-allauth.readthedocs.io/en/latest/) – Comprehensive guide for third-party account management in Django.
+
+- **Star Ratings Integration:**  
+  [Django Star Ratings](https://github.com/wildfish/django-star-ratings) – GitHub repository for the star ratings package used for review submissions.
+
+- **Email Integration in Django:**  
+  [Django Email Documentation](https://docs.djangoproject.com/en/4.2/topics/email/) – Covers setting up email backends (e.g., Mailjet) for password resets and notifications.
+
+- **Whitenoise for Static Files:**  
+  [Whitenoise Documentation](http://whitenoise.evans.io/en/stable/) – Guide on serving static files efficiently in Django with Whitenoise.
+
+- **Bootstrap Documentation:**  
+  [Bootstrap Docs](https://getbootstrap.com/) – For front-end design and responsive layout elements.
+
+- **Django Debug Toolbar:**  
+  [Django Debug Toolbar](https://django-debug-toolbar.readthedocs.io/en/latest/) – A powerful tool for debugging and performance analysis in Django applications.
+
+- **Wireframe Tools:**  
+  [Wireframe.cc](https://wireframe.cc/) – A simple, free tool for creating low-fidelity wireframes.  
+  [Pencil Project](https://pencil.evolus.vn/) – An open-source tool for creating mockups and wireframes.
+
+- **Autopep8:**  
+  [autopep8 on PyPI](https://pypi.org/project/autopep8/) – A tool that automatically formats Python code to conform to the PEP 8 style guide.
+
+- **Additional Django Tutorials:**  
+  [Real Python Django Tutorials](https://realpython.com/tutorials/django/) – Comprehensive tutorials covering various aspects of Django development.
