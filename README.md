@@ -2,6 +2,8 @@
 
 A premium barber services web application offering online booking, user reviews, and account management.
 
+![Homepage Screenshot](static/images/homepage.png)
+
 ## Table of Contents
 
 - [Overview](#overview)
@@ -24,7 +26,7 @@ Beard & Blade is a Django-based application that provides a premium barbering ex
 - **Backend:** Python, Django
 - **Frontend:** HTML, CSS, Bootstrap, JavaScript
 - **Database:** PostgreSQL (configured via dj_database_url)
-- **Others:** django-crontab, django-allauth, django-star-ratings, autopep, django-debug-toolbar, whitenoise, mailjet back end email.
+- **Others:** django-crontab, django-allauth, django-star-ratings, autopep, django-debug-toolbar, whitenoise, mailjet (for email notifications)
 
 ## Installation & Setup
 
@@ -133,3 +135,62 @@ Below is the project's color palette, as defined in the CSS and used across vari
 - **Grey Buttons (`#6c757d`):**
   - **Usage:** Applied to secondary buttons, such as those for cancel actions and password changes.
   - **Templates:** Seen in the profile page and various modals for consistent secondary action styling.
+
+## Database Schema
+
+Below is the ER diagram representing the database schema for Beard & Blade:
+
+![Database Schema](static/images/schema.png)
+
+### Models and Relationships
+
+- **User**
+  - **Fields:**
+    - `id`: Primary Key
+    - `username`: User's unique username
+    - `email`: User's email address
+
+- **Service**
+  - **Fields:**
+    - `id`: Primary Key
+    - `name`: Service name (unique)
+    - `duration`: Duration of the service (stored as a duration/timedelta)
+    - `price`: Service price (decimal)
+
+- **TimeSlot**
+  - **Fields:**
+    - `id`: Primary Key
+    - `date`: Date of the timeslot
+    - `start_time`: Start time of the timeslot
+    - `end_time`: End time of the timeslot
+    - `status`: Status of the slot (choices: "available", "pending", "booked", "expired")
+  - **Constraints:**  
+    Unique together on (`date`, `start_time`, `end_time`)
+
+- **OpeningHours**
+  - **Fields:**
+    - `id`: Primary Key
+    - `day_of_week`: Integer representing the day (0=Monday, ..., 6=Sunday; unique)
+    - `open_time`: Opening time for the day
+    - `close_time`: Closing time for the day
+
+- **Booking**
+  - **Fields:**
+    - `id`: Primary Key
+    - `status`: Booking status (choices: "pending", "confirmed", "completed", "cancelled")
+    - `created_at`: Timestamp when the booking was created
+    - `updated_at`: Timestamp when the booking was last updated
+    - `user`: Foreign Key to **User** (the user who made the booking)
+    - `service`: Foreign Key to **Service** (the booked service)
+  - **Relationships:**
+    - **Many-to-Many:** Connects with **TimeSlot** via a join table (each booking reserves multiple 15-minute timeslots)
+
+- **Review**
+  - **Fields:**
+    - `id`: Primary Key
+    - `rating`: Rating value (1 to 5)
+    - `comment`: Optional text field for additional feedback
+    - `created_at`: Timestamp when the review was created
+    - `updated_at`: Timestamp when the review was updated
+    - `booking`: One-to-One relation with **Booking** (each booking can have one review)
+    - `user`: Foreign Key to **User** (the user who wrote the review)
