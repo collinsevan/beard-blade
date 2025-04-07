@@ -1,9 +1,10 @@
-# Beard & Blade
+# Beard & Blade 
+
 
 A premium barber services web application offering online booking, user reviews, and account management.
 
 ![Homepage Screenshot](static/images/homepage.png)
-
+# [Live Site](https://beard-blade-b70a56b4f23e.herokuapp.com/)
 ## Table of Contents
 
 - [Overview](#overview)
@@ -194,3 +195,62 @@ Below is the ER diagram representing the database schema for Beard & Blade:
     - `updated_at`: Timestamp when the review was updated
     - `booking`: One-to-One relation with **Booking** (each booking can have one review)
     - `user`: Foreign Key to **User** (the user who wrote the review)
+
+## Wireframes
+
+Below are the wireframes for each major page of the Beard & Blade application. Each wireframe shows the general layout, navigation, and key elements of the respective page.
+
+### Home Page Wireframe
+![Home Page Wireframe](static/images/home_wire.png)
+
+- **Purpose:** Introduces users to Beard & Blade with a hero section and prominent call-to-action button.  
+- **Layout Highlights:**  
+  - Navigation bar at the top.  
+  - Hero section with a background image, branding text, and "Book Now" button.  
+  - Footer connected at the bottom.
+
+---
+
+### Services Page Wireframe
+![Services Page Wireframe](static/images/services_wire.png)
+
+- **Purpose:** Displays a grid of available services (name, duration, price) with a "Book Now" option.  
+- **Layout Highlights:**  
+  - Navigation bar at the top.  
+  - Service cards arranged in rows, each showing essential information.  
+  - Footer connected at the bottom.
+
+---
+
+### About Page Wireframe
+![About Page Wireframe](static/images/about_wire.png)
+
+- **Purpose:** Provides background information on the establishment and head barber.  
+- **Layout Highlights:**  
+  - Navigation bar at the top.  
+  - Two sections showcasing images and descriptive text (one for the establishment, one for the barber).  
+  - Footer at the bottom for consistency.
+
+---
+
+### Login Page Wireframe
+![Login Page Wireframe](static/images/login_wire.png)
+
+- **Purpose:** Allows returning users to log into their accounts securely.  
+- **Layout Highlights:**  
+  - Navigation bar at the top.  
+  - Simple form for entering username and password.  
+  - "Log In" button styled in line with the site’s color scheme.  
+  - Footer connected at the bottom.
+
+---
+
+### Registration Page Wireframe
+![Registration Page Wireframe](static/images/register_wire.png)
+
+- **Purpose:** Lets new users create an account with username, email, and password fields.  
+- **Layout Highlights:**  
+  - Navigation bar at the top.  
+  - Form fields for username, email, password, and password confirmation.  
+  - "Sign Up" button in the site’s signature color.  
+  - Footer at the bottom to maintain site consistency.
