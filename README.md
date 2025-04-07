@@ -11,7 +11,7 @@ A premium barber services web application offering online booking, user reviews,
 - [Overview](#overview)
 - [Languages & Technologies](#languages--technologies)
 - [Installation & Setup](#installation--setup)
-- [Deployment](#Deployment)
+- [Deployment](#deployment-to-heroku)
 - [Features](#features)
 - [Color Scheme](#color-scheme)
 - [Database Schema](#database-schema)
@@ -62,6 +62,39 @@ Mark Completed: `python manage.py mark_completed`
 
 **Running the Development Server:** Run: `python manage.py runserver`  
 Then visit [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser
+
+## Deployment to Heroku
+
+Follow these steps to deploy Beard & Blade to Heroku:
+
+1. **Create a Heroku Account:**  
+   Sign up at [Heroku](https://signup.heroku.com/) if you haven't already.
+
+2. **Install the Heroku CLI:**  
+   Download and install the CLI from [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli).
+
+3. **Log in to Heroku:**  
+   Run: `heroku login`
+
+4. **Create a New Heroku App:**  
+   Run: `heroku create your-app-name`
+
+5. **Configure Environment Variables on Heroku:**  
+   Run: `heroku config:set SECRET_KEY=your-secret-key DATABASE_URL=your-database-url MAILJET_API_KEY=your-mailjet-api-key MAILJET_API_SECRET=your-mailjet-api-secret`
+
+6. **Push Your Code to Heroku:**  
+   Run: `git push heroku main`
+
+7. **Run Database Migrations:**  
+   Run: `heroku run python manage.py migrate`
+
+8. **(Optional) Create a Superuser:**  
+   Run: `heroku run python manage.py createsuperuser`
+
+9. **Open Your Deployed App:**  
+   Run: `heroku open`
+
+
 
 ## Features
 
