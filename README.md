@@ -16,7 +16,9 @@ A premium barber services web application offering online booking, user reviews,
 - [Database Schema](#database-schema)
 - [Wireframes](#wireframes)
 - [User Story & Admin Story](#user-story--admin-story)
+- [Lighthouse Testing](#lighthouse-testing)
 - [Manual Testing](#manual-testing)
+- [Known Bugs](#known-bugs)
 - [References](#references)
 
 ## Overview
@@ -387,3 +389,100 @@ This command checks for bookings whose end time has passed and updates their sta
    - Developed custom admin widgets (e.g., for star ratings in the `Review` model) to enhance usability.
    - Extended the admin interface to include additional filtering and searching options for better control over services, bookings, and reviews.
 
+## Lighthouse Testing
+
+We have tested every page of Beard & Blade using Google Lighthouse. All pages scored at least 85 and above across Performance, Accessibility, Best Practices, and SEO. The results confirm that our site is optimized for a fast, accessible, and user-friendly experience. All registration pages tested and passed.
+
+**Lighthouse Test Screenshots:**
+
+- **Home Page:**  
+  ![Lighthouse Home Page](static/images/lighthouse_home.png)
+  
+- **Services Page:**  
+  ![Lighthouse Services Page](static/images/lighthouse_services.png)
+  
+- **About Page:**  
+  ![Lighthouse About Page](static/images/lighthouse_about.png)
+  
+- **Login Page:**  
+  ![Lighthouse Login Page](static/images/lighthouse_account.png)
+  
+- **Registration Page:**  
+  ![Lighthouse Registration Page](static/images/lighthouse_register.png)
+  
+- **Review Edit Page:**  
+  ![Lighthouse Profile Page](static/images/lighthouse_reviewedit.png)
+
+- **Review Page:**  
+  ![Lighthouse Profile Page](static/images/lighthouse_review.png)
+
+Each screenshot represents a successful Lighthouse report, demonstrating our commitment to high quality and efficient performance across the application.
+
+## Manual Testing
+
+### User Authentication and Account Management
+
+- **Registration Flow:**  
+  - **Test:** Completed new user registration by filling out username, email, password, and password confirmation fields.  
+  - **Validation:** Checked for proper error messages for missing fields, mismatched passwords, and duplicate usernames.  
+  - **Result:** Valid registrations succeeded and users were redirected to the login page with a success message.
+
+- **Login Flow:**  
+  - **Test:** Logged in with valid credentials and attempted login with invalid data.  
+  - **Validation:** Verified that the password toggle worked correctly and that unauthenticated users were redirected appropriately when accessing restricted pages.  
+  - **Result:** Login functioned as expected with clear error messages on invalid attempts.
+
+- **Password Reset Flow:**  
+  - **Test:** Initiated a password reset by submitting a registered email address and followed the reset link to set a new password.  
+  - **Validation:** Confirmed that the email was sent (using Mailjet) and that the new password allowed successful login.  
+  - **Result:** Password reset and change processes performed correctly with valid feedback.
+
+### Booking and Timeslot Management
+
+- **Service Booking:**  
+  - **Test:** Booked a service by selecting a valid service, date, and start time.  
+  - **Validation:** Verified that the booking process correctly computed the number of contiguous 15-minute timeslots required, reserved them, and updated the booking status ("pending", then "confirmed" upon confirmation).  
+  - **Result:** Bookings were created and edited successfully; the correct timeslot allocation was enforced.
+
+- **Timeslot Generation:**  
+  - **Test:** Ran the `python manage.py timeslots --days 7` command to generate timeslots based on the shop's opening hours.  
+  - **Validation:** Checked that timeslots were created for each day without duplicates and in the correct time increments.  
+  - **Result:** Timeslot generation functioned as intended, providing sufficient availability for booking.
+
+- **Booking Status Updates:**  
+  - **Test:** Simulated past booking times and manually executed the `python manage.py mark_completed` command.  
+  - **Validation:** Verified that bookings with end times in the past were correctly marked as "completed."  
+  - **Result:** Bookings updated accurately upon manual execution of the command.
+
+### Modal and UI Component Testing
+
+- **"No Available Timeslots" Modal:**  
+  - **Test:** Selected a date/time slot with no available timeslots to trigger the modal on the booking page.  
+  - **Validation:** Checked that the modal displayed the correct message and that the "OK" button properly dismissed the modal.  
+  - **Result:** Modal functionality worked smoothly, providing clear user feedback.
+
+- **Review Deletion Confirmation Modal:**  
+  - **Test:** Clicked the delete button for a review in the profile page, triggering the confirmation modal.  
+  - **Validation:** Verified that the modal appeared with a confirmation prompt and that confirming the deletion successfully removed the review.  
+  - **Result:** Review deletion modals operated as intended, ensuring proper user confirmation.
+
+### Model and Data Validation
+
+- **Booking Model Validations:**  
+  - **Test:** Attempted to create bookings with non-contiguous or an incorrect number of timeslots.  
+  - **Validation:** Confirmed that validations in the `Booking` model prevented invalid bookings and returned clear error messages.  
+  - **Result:** Model-level validations enforced contiguous timeslot selection and correct booking durations.
+
+- **Review Model Validations:**  
+  - **Test:** Submitted reviews for completed bookings and attempted to submit duplicate reviews for the same booking.  
+  - **Validation:** Ensured that the review model only accepted one review per booking and that the star rating widget captured ratings correctly.  
+  - **Result:** Review submissions and validations performed as expected.
+
+- **Authentication Middleware:**  
+  - **Test:** Attempted access to restricted pages (e.g., booking and profile pages) while not logged in.  
+  - **Validation:** Checked that unauthenticated users were redirected to the login page.  
+  - **Result:** Authentication flow was secure and correctly enforced redirection.
+
+### Summary
+
+All manually tested features—including user registration, login, password reset, booking processes, timeslot generation, modal displays, and model validations—performed as expected. The application provides clear user feedback, robust error handling, and secure authentication, ensuring a smooth and reliable user experience.
